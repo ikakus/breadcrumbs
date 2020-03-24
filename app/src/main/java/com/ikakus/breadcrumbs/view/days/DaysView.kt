@@ -14,8 +14,8 @@ class DaysView @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
     private var dayWidth: Float = 0f
     private val TAG = "DaysView"
-    private val totalDays = 33
-    var daysCommited = 33
+    private val totalDays = 11
+    var daysCommited = 5
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -38,7 +38,7 @@ class DaysView @JvmOverloads constructor(
 
     private fun drawDays(canvas: Canvas) {
         paint.run {
-            color = Color.BLACK
+            color = Color.YELLOW
             style = Paint.Style.FILL
         }
         for (i in daysCommited..totalDays) {
@@ -48,14 +48,27 @@ class DaysView @JvmOverloads constructor(
                 dayWidth + i * dayWidth,
                 dayWidth,
                 paint
-        )
+            )
         }
 
         paint.run {
-            color = Color.YELLOW
+            color = Color.GREEN
+            style = Paint.Style.FILL
+        }
+        for (i in 0..daysCommited) {
+            canvas.drawRect(
+                i * (dayWidth),
+                0f,
+                dayWidth + i * dayWidth,
+                dayWidth,
+                paint
+            )
+        }
+        paint.run {
+            color = Color.RED
             style = Paint.Style.STROKE
         }
-        for (i in 0 .. daysCommited) {
+        for (i in 0..totalDays) {
             canvas.drawRect(
                 i * (dayWidth),
                 0f,
