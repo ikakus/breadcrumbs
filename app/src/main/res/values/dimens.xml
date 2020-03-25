@@ -1,4 +1,5 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="day_view_corner_radius">2dp</dimen>
+    <dimen name="day_view_stroke">1dp</dimen>
 </resources>

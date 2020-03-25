@@ -8,9 +8,9 @@
         android:topRightRadius="@dimen/day_view_corner_radius" />
 
     <stroke
-        android:width="0.5dp"
-        android:color="@color/black" />
+        android:width="@dimen/day_view_stroke"
+        android:color="@color/stroke_color" />
 
-    <solid android:color="@color/yellow" />
+    <solid android:color="@color/unchecked_day" />
 
 </shape>
