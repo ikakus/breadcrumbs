@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 
 
-class DaysRecyclerViewAdapter(private val myDataset: Array<Boolean>) :
+class DaysRecyclerViewAdapter(private val myDataset: List<Boolean>) :
     RecyclerView.Adapter<DaysRecyclerViewAdapter.DaysViewHolder>() {
 
 
@@ -27,10 +27,10 @@ class DaysRecyclerViewAdapter(private val myDataset: Array<Boolean>) :
     }
 
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
-        holder.itemView.setBackgroundColor(if(myDataset[position]){
-            context.resources.getColor(R.color.green)
+        holder.itemView.setBackgroundDrawable(if(myDataset[position]){
+            context.resources.getDrawable(R.drawable.day_checked)
         }else{
-            context.resources.getColor(R.color.yellow)
+            context.resources.getDrawable(R.drawable.day_unchecked)
         })
     }
 
