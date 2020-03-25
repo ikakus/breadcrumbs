@@ -20,18 +20,18 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val array = arrayListOf<Boolean>().apply {
-            for (a in 1..33) {
+            for (a in 1..30) {
                 this.add(false)
             }
         }
-        viewManager = GridLayoutManager(this, 11)
+        viewManager = GridLayoutManager(this, 6)
         viewAdapter = DaysRecyclerViewAdapter(array)
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-            addItemDecoration(SpacesItemDecoration(10))
+//            addItemDecoration(SpacesItemDecoration(10))
         }
 
 

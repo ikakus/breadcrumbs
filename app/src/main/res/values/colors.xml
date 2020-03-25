@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#26C6DA</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#3F51B5</color>
+    <color name="colorAccent">#26C6DA</color>
     <color name="green">#4CAF50</color>
     <color name="yellow">#FFEB3B</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
     <color name="stroke_color">#00DADADA</color>
-    <color name="checked_day">#A5D6A7</color>
-    <color name="unchecked_day">#90CAF9</color>
+    <color name="checked_day">#66BB6A</color>
+    <color name="unchecked_day">#26C6DA</color>
 </resources>

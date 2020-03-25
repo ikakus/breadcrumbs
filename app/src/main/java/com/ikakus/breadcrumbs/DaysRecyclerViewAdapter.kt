@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.day_view.view.*
 
 
-class DaysRecyclerViewAdapter(private val myDataset: List<Boolean>) :
+class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
     RecyclerView.Adapter<DaysRecyclerViewAdapter.DaysViewHolder>() {
-
 
     class DaysViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -27,12 +27,14 @@ class DaysRecyclerViewAdapter(private val myDataset: List<Boolean>) :
     }
 
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
-        holder.itemView.setBackgroundDrawable(if(myDataset[position]){
-            context.resources.getDrawable(R.drawable.day_checked)
-        }else{
-            context.resources.getDrawable(R.drawable.day_unchecked)
-        })
+        holder.itemView.day_view_layout_back.setBackgroundDrawable(
+            if (days[position]) {
+                context.resources.getDrawable(R.drawable.day_checked)
+            } else {
+                context.resources.getDrawable(R.drawable.day_unchecked)
+            }
+        )
     }
 
-    override fun getItemCount() = myDataset.size
+    override fun getItemCount() = days.size
 }
