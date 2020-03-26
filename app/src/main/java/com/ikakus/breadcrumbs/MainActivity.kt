@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateCounter() {
         findViewById<TextView>(R.id.count).apply {
             val count = array.count { it }
+            checkPosition = count - 1
             text = "$count/$strikeLength"
         }
     }
