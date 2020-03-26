@@ -3,10 +3,11 @@ package com.ikakus.breadcrumbs
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -14,16 +15,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+
+    private val array: MutableList<Boolean> = mutableListOf()
+    private val strikeLength = 30
+    private var checkPosition = 0
+
+    init {
+
+        for (a in 1..strikeLength) {
+            array.add(false)
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val array = arrayListOf<Boolean>().apply {
-            for (a in 1..30) {
-                this.add(false)
-            }
-        }
         viewManager = GridLayoutManager(this, 6)
         viewAdapter = DaysRecyclerViewAdapter(array)
 
@@ -31,13 +40,50 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
-//            addItemDecoration(SpacesItemDecoration(10))
         }
 
+        updateCounter()
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            set(view)
+        }
+
+        fab.setOnLongClickListener { view ->
+            unset(view)
+            true
+        }
+    }
+
+    private fun updateCounter() {
+        var countView = findViewById<TextView>(R.id.count).apply {
+            val count = array.count { it }
+            text = "$count/$strikeLength"
+        }
+    }
+
+    private fun unset(view: View) {
+        decrement()
+        array[checkPosition] = false
+        updateCounter()
+        viewAdapter.notifyDataSetChanged()
+    }
+
+    private fun set(view: View) {
+        array[checkPosition] = true
+        increment()
+        updateCounter()
+        viewAdapter.notifyDataSetChanged()
+    }
+
+    private fun decrement() {
+        if (checkPosition > 0) {
+            checkPosition--
+        }
+    }
+
+    private fun increment() {
+        if (checkPosition < strikeLength) {
+            checkPosition++
         }
     }
 
