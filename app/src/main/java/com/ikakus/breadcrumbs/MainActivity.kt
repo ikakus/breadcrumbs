@@ -1,5 +1,6 @@
 package com.ikakus.breadcrumbs
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,7 +9,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private val array: MutableList<Boolean> = mutableListOf()
+    private var array: MutableList<Boolean> = mutableListOf()
     private val strikeLength = 30
     private var checkPosition = 0
 
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        array = getDays()
+
         viewManager = GridLayoutManager(this, 6)
         viewAdapter = DaysRecyclerViewAdapter(array)
 
@@ -41,7 +47,6 @@ class MainActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
-
         updateCounter()
 
         fab.setOnClickListener { view ->
@@ -66,6 +71,7 @@ class MainActivity : AppCompatActivity() {
         array[checkPosition] = false
         updateCounter()
         viewAdapter.notifyDataSetChanged()
+        saveDays()
     }
 
     private fun set(view: View) {
@@ -73,6 +79,28 @@ class MainActivity : AppCompatActivity() {
         increment()
         updateCounter()
         viewAdapter.notifyDataSetChanged()
+        saveDays()
+    }
+
+    fun saveDays() {
+        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        val gson = Gson()
+        with(sharedPref.edit()) {
+            val jsonText: String = gson.toJson(array)
+            putString("days", jsonText)
+            commit()
+        }
+    }
+
+    fun getDays(): MutableList<Boolean> {
+        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        val gson = Gson()
+        val savedString = sharedPref.getString ("days", "")
+        val turnsType = object : TypeToken<List<Boolean>>() {}.type
+        val turns = Gson().fromJson<List<Boolean>>(savedString, turnsType)
+
+
+        return turns.toMutableList()
     }
 
     private fun decrement() {
