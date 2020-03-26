@@ -2,9 +2,6 @@ package com.ikakus.breadcrumbs
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,14 +19,12 @@ class MainActivity : AppCompatActivity() {
 
     private var array: MutableList<Boolean> = mutableListOf()
     private val strikeLength = 30
-    private var checkPosition = 0
+    private var checkPosition = -1
 
     init {
-
         for (a in 1..strikeLength) {
             array.add(false)
         }
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,87 +42,75 @@ class MainActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
         updateCounter()
 
-        fab.setOnClickListener { view ->
-            set(view)
+        fab.setOnClickListener {
+            check()
         }
 
-        fab.setOnLongClickListener { view ->
-            unset(view)
+        fab.setOnLongClickListener {
+            unCheck()
             true
         }
     }
 
     private fun updateCounter() {
-        var countView = findViewById<TextView>(R.id.count).apply {
+        findViewById<TextView>(R.id.count).apply {
             val count = array.count { it }
             text = "$count/$strikeLength"
         }
     }
 
-    private fun unset(view: View) {
-        decrement()
-        array[checkPosition] = false
-        updateCounter()
-        viewAdapter.notifyDataSetChanged()
-        saveDays()
+    private fun unCheck() {
+        if (checkPosition > -1) {
+            array[checkPosition] = false
+            decrementPosition()
+            updateCounter()
+            viewAdapter.notifyDataSetChanged()
+            saveDays()
+        }
     }
 
-    private fun set(view: View) {
+    private fun check() {
+        incrementPosition()
         array[checkPosition] = true
-        increment()
         updateCounter()
         viewAdapter.notifyDataSetChanged()
         saveDays()
     }
 
-    fun saveDays() {
-        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
-        val gson = Gson()
+    private fun saveDays() {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            val jsonText: String = gson.toJson(array)
+            val jsonText: String = Gson().toJson(array)
             putString("days", jsonText)
             commit()
         }
     }
 
-    fun getDays(): MutableList<Boolean> {
-        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
-        val gson = Gson()
-        val savedString = sharedPref.getString ("days", "")
+    private fun getDays(): MutableList<Boolean> {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        val savedString = sharedPref.getString("days", "")
         val turnsType = object : TypeToken<List<Boolean>>() {}.type
         val turns = Gson().fromJson<List<Boolean>>(savedString, turnsType)
-
 
         return turns.toMutableList()
     }
 
-    private fun decrement() {
-        if (checkPosition > 0) {
+    private fun decrementPosition(): Boolean {
+        if (checkPosition > -1) {
             checkPosition--
+            return true
         }
+        return false
     }
 
-    private fun increment() {
-        if (checkPosition < strikeLength) {
+    private fun incrementPosition(): Boolean {
+        if (checkPosition < strikeLength - 1) {
             checkPosition++
+            return true
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
+        return false
     }
 }
