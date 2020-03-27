@@ -21,18 +21,12 @@ class MainActivity : AppCompatActivity() {
     private val strikeLength = 30
     private var checkPosition = -1
 
-    init {
-        for (a in 1..strikeLength) {
-            array.add(false)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        array = getDays()
+        initialize()
 
         viewManager = GridLayoutManager(this, 6)
         viewAdapter = DaysRecyclerViewAdapter(array)
@@ -52,6 +46,17 @@ class MainActivity : AppCompatActivity() {
         fab.setOnLongClickListener {
             unCheck()
             true
+        }
+    }
+
+    private fun initialize() {
+        if (isFirstRun()) {
+            for (a in 1..strikeLength) {
+                array.add(false)
+            }
+            setFitstRun(false)
+        } else {
+            array = getDays().toMutableList()
         }
     }
 
@@ -81,6 +86,19 @@ class MainActivity : AppCompatActivity() {
         saveDays()
     }
 
+    private fun isFirstRun(): Boolean {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        return sharedPref.getBoolean("firstRun", true)
+    }
+
+    private fun setFitstRun(firstRun:Boolean){
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putBoolean("firstRun", firstRun)
+            commit()
+        }
+    }
+
     private fun saveDays() {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
@@ -90,13 +108,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getDays(): MutableList<Boolean> {
+    private fun getDays(): List<Boolean> {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        val savedString = sharedPref.getString("days", "")
-        val turnsType = object : TypeToken<List<Boolean>>() {}.type
-        val turns = Gson().fromJson<List<Boolean>>(savedString, turnsType)
+        val savedString = sharedPref.getString("days", null)
+        savedString?.let {
+            val type = object : TypeToken<List<Boolean>>() {}.type
+            val days = Gson().fromJson<List<Boolean>>(savedString, type)
 
-        return turns.toMutableList()
+            return days.toMutableList()
+        }?: return  emptyList()
     }
 
     private fun decrementPosition(): Boolean {
