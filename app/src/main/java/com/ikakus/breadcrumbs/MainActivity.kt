@@ -36,12 +36,24 @@ class MainActivity : AppCompatActivity() {
         initTitle()
         updateCounter()
         setListeners()
+        checkButtonState()
+    }
+
+    private fun checkButtonState() {
+        findViewById<Button>(R.id.fab).apply {
+            val checkCount = days.count { it }
+            if (checkCount == 0) {
+                this.text = "Start"
+            } else {
+                this.text = "Check"
+            }
+        }
     }
 
     private fun initTitle() {
         findViewById<EditText>(R.id.title).apply {
             val title = loadTitle()
-            if(title.isNotEmpty()){
+            if (title.isNotEmpty()) {
                 this.setText(title)
             }
         }
@@ -102,11 +114,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDays() {
-        if (isFirstRun()) {
+        if (getDays().isEmpty()) {
             for (a in 1..strikeLength) {
                 days.add(false)
             }
-            setFirstRun(false)
         } else {
             days = getDays().toMutableList()
         }
@@ -136,6 +147,7 @@ class MainActivity : AppCompatActivity() {
             updateCounter()
             viewAdapter.notifyDataSetChanged()
             saveDays()
+            checkButtonState()
         }
     }
 
@@ -145,19 +157,7 @@ class MainActivity : AppCompatActivity() {
         updateCounter()
         viewAdapter.notifyDataSetChanged()
         saveDays()
-    }
-
-    private fun isFirstRun(): Boolean {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        return sharedPref.getBoolean("firstRun", true)
-    }
-
-    private fun setFirstRun(firstRun: Boolean) {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putBoolean("firstRun", firstRun)
-            commit()
-        }
+        checkButtonState()
     }
 
     private fun saveTitle(title: String) {
@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadTitle(): String{
+    private fun loadTitle(): String {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         return sharedPref.getString("title", "").orEmpty()
     }

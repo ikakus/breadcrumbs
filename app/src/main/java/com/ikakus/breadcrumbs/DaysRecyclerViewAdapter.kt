@@ -38,7 +38,7 @@ class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
         holder.itemView.day_view_layout_back.elevation = if (days[position]) {
             20f
         } else {
-            1f
+            0f
         }
     }
 
