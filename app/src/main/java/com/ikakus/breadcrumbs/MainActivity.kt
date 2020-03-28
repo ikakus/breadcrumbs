@@ -19,12 +19,12 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter: DaysRecyclerViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var days: MutableList<Boolean> = mutableListOf()
-    private val strikeLength = 30
-    private var checkPosition = -1
+    private val strikeLength = 10
+    private var checkPosition = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,16 +135,18 @@ class MainActivity : AppCompatActivity() {
     private fun updateCounter() {
         findViewById<TextView>(R.id.count).apply {
             val count = days.count { it }
-            checkPosition = count - 1
+            checkPosition = count
             text = "$count/$strikeLength"
+            viewAdapter.setCheckPosition(checkPosition)
         }
     }
 
     private fun unCheck() {
-        if (checkPosition > -1) {
-            days[checkPosition] = false
+        if (checkPosition > 0) {
+            days[checkPosition - 1] = false
             decrementPosition()
             updateCounter()
+            viewAdapter.setCheckPosition(checkPosition)
             viewAdapter.notifyDataSetChanged()
             saveDays()
             checkButtonState()
@@ -153,11 +155,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun check() {
         incrementPosition()
-        days[checkPosition] = true
+        days[checkPosition - 1] = true
         updateCounter()
+        viewAdapter.setCheckPosition(checkPosition)
         viewAdapter.notifyDataSetChanged()
         saveDays()
+        saveLastCheckday()
         checkButtonState()
+    }
+
+    private fun saveLastCheckday() {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putLong("lastCheckDay", Date().time)
+            commit()
+        }
+    }
+
+    private fun getLastCheckedDay(): Date {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        return Date(sharedPref.getLong("lastCheckDay", Date().time))
     }
 
     private fun saveTitle(title: String) {
@@ -194,7 +211,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun decrementPosition(): Boolean {
-        if (checkPosition > -1) {
+        if (checkPosition > 0) {
             checkPosition--
             return true
         }
@@ -202,7 +219,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun incrementPosition(): Boolean {
-        if (checkPosition < strikeLength - 1) {
+        if (checkPosition < strikeLength) {
             checkPosition++
             return true
         }

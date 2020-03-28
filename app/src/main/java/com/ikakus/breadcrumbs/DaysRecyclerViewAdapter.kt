@@ -14,6 +14,7 @@ class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
 
     class DaysViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
+    private var checkPosition: Int = 0
     lateinit var context: Context
 
     override fun onCreateViewHolder(
@@ -28,19 +29,35 @@ class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
 
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
         holder.itemView.day_view_layout_back.setBackgroundDrawable(
-            if (days[position]) {
-                context.resources.getDrawable(R.drawable.day_checked)
-            } else {
-                context.resources.getDrawable(R.drawable.day_unchecked)
+            when {
+                days[position] -> {
+                    context.resources.getDrawable(R.drawable.day_checked)
+                }
+                position == checkPosition -> {
+                    context.resources.getDrawable(R.drawable.day_current)
+                }
+                else -> {
+                    context.resources.getDrawable(R.drawable.day_unchecked)
+                }
             }
         )
 
-        holder.itemView.day_view_layout_back.elevation = if (days[position]) {
-            20f
-        } else {
-            0f
+        holder.itemView.day_view_layout_back.elevation = when {
+            days[position] -> {
+                10f
+            }
+            position == checkPosition -> {
+                20f
+            }
+            else -> {
+                0f
+            }
         }
     }
 
     override fun getItemCount() = days.size
+
+    fun setCheckPosition(checkPosition: Int) {
+        this.checkPosition = checkPosition
+    }
 }

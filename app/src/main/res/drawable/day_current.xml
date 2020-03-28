@@ -11,6 +11,6 @@
         android:width="@dimen/day_view_stroke"
         android:color="@color/stroke_color" />
 
-    <solid android:color="@color/unchecked_day" />
+    <solid android:color="@color/current_day" />
 
 </shape>

@@ -10,5 +10,6 @@
 
     <color name="stroke_color">#00DADADA</color>
     <color name="checked_day">#66BB6A</color>
-    <color name="unchecked_day">#26C6DA</color>
+    <color name="current_day">#FFCA28</color>
+    <color name="unchecked_day">#CFCFCF</color>
 </resources>
