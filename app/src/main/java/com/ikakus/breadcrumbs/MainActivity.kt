@@ -2,13 +2,18 @@ package com.ikakus.breadcrumbs
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,19 +22,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private var array: MutableList<Boolean> = mutableListOf()
+    private var days: MutableList<Boolean> = mutableListOf()
     private val strikeLength = 30
     private var checkPosition = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
-        initialize()
+        initDays()
+        initTitle()
+        updateCounter()
 
         viewManager = GridLayoutManager(this, 6)
-        viewAdapter = DaysRecyclerViewAdapter(array)
+        viewAdapter = DaysRecyclerViewAdapter(days)
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
             setHasFixedSize(true)
@@ -37,32 +43,86 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-        updateCounter()
+        setListeners()
+    }
 
-        fab.setOnClickListener {
-            check()
-        }
-
-        fab.setOnLongClickListener {
-            unCheck()
-            true
+    private fun initTitle() {
+        findViewById<EditText>(R.id.title).apply {
+            val title = loadTitle()
+            if(title.isNotEmpty()){
+                this.setText(title)
+            }
         }
     }
 
-    private fun initialize() {
+    private fun setListeners() {
+        findViewById<FloatingActionButton>(R.id.fab).apply {
+            this.setOnClickListener {
+                check()
+            }
+
+            this.setOnLongClickListener {
+                unCheck()
+                true
+            }
+        }
+
+        findViewById<EditText>(R.id.title).apply {
+            addTextChangedListener(object : TextWatcher {
+                private var timer: Timer = Timer()
+                private val DELAY: Long = 1000 // milliseconds
+
+
+                override fun afterTextChanged(s: Editable?) {
+                    val title = s.toString()
+                    timer.cancel()
+                    timer = Timer()
+                    timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                saveTitle(title)
+                                runOnUiThread {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Title saved",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                        },
+                        DELAY
+                    )
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+            })
+        }
+    }
+
+    private fun initDays() {
         if (isFirstRun()) {
             for (a in 1..strikeLength) {
-                array.add(false)
+                days.add(false)
             }
             setFitstRun(false)
         } else {
-            array = getDays().toMutableList()
+            days = getDays().toMutableList()
         }
     }
 
     private fun updateCounter() {
         findViewById<TextView>(R.id.count).apply {
-            val count = array.count { it }
+            val count = days.count { it }
             checkPosition = count - 1
             text = "$count/$strikeLength"
         }
@@ -70,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun unCheck() {
         if (checkPosition > -1) {
-            array[checkPosition] = false
+            days[checkPosition] = false
             decrementPosition()
             updateCounter()
             viewAdapter.notifyDataSetChanged()
@@ -80,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun check() {
         incrementPosition()
-        array[checkPosition] = true
+        days[checkPosition] = true
         updateCounter()
         viewAdapter.notifyDataSetChanged()
         saveDays()
@@ -91,7 +151,7 @@ class MainActivity : AppCompatActivity() {
         return sharedPref.getBoolean("firstRun", true)
     }
 
-    private fun setFitstRun(firstRun:Boolean){
+    private fun setFitstRun(firstRun: Boolean) {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             putBoolean("firstRun", firstRun)
@@ -99,10 +159,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun saveTitle(title: String) {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("title", title)
+            commit()
+        }
+    }
+
+    private fun loadTitle(): String{
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        return sharedPref.getString("title", "").orEmpty()
+    }
+
     private fun saveDays() {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            val jsonText: String = Gson().toJson(array)
+            val jsonText: String = Gson().toJson(days)
             putString("days", jsonText)
             commit()
         }
@@ -116,7 +190,7 @@ class MainActivity : AppCompatActivity() {
             val days = Gson().fromJson<List<Boolean>>(savedString, type)
 
             return days.toMutableList()
-        }?: return  emptyList()
+        } ?: return emptyList()
     }
 
     private fun decrementPosition(): Boolean {
