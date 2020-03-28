@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var days: MutableList<Boolean> = mutableListOf()
-    private val strikeLength = 10
+    private val strikeLength = 12
     private var checkPosition = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +46,14 @@ class MainActivity : AppCompatActivity() {
                 this.text = "Start"
             } else {
                 this.text = "Check"
+            }
+
+            if (checkCount == (strikeLength - 1)) {
+                this.text = "Finish"
+            }
+
+            if (checkCount == (strikeLength)) {
+                this.text = "All done!"
             }
         }
     }
