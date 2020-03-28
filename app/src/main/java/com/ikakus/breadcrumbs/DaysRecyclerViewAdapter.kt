@@ -34,6 +34,12 @@ class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
                 context.resources.getDrawable(R.drawable.day_unchecked)
             }
         )
+
+        holder.itemView.day_view_layout_back.elevation = if (days[position]) {
+            20f
+        } else {
+            1f
+        }
     }
 
     override fun getItemCount() = days.size

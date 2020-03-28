@@ -4,13 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
@@ -30,19 +30,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewManager = GridLayoutManager(this, 6)
+
         initDays()
         initTitle()
         updateCounter()
-
-        viewManager = GridLayoutManager(this, 6)
-        viewAdapter = DaysRecyclerViewAdapter(days)
-
-        recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
-
         setListeners()
     }
 
@@ -56,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        findViewById<FloatingActionButton>(R.id.fab).apply {
+        findViewById<Button>(R.id.fab).apply {
             this.setOnClickListener {
                 check()
             }
@@ -114,10 +106,19 @@ class MainActivity : AppCompatActivity() {
             for (a in 1..strikeLength) {
                 days.add(false)
             }
-            setFitstRun(false)
+            setFirstRun(false)
         } else {
             days = getDays().toMutableList()
         }
+
+        viewAdapter = DaysRecyclerViewAdapter(days)
+
+        recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+
     }
 
     private fun updateCounter() {
@@ -151,14 +152,13 @@ class MainActivity : AppCompatActivity() {
         return sharedPref.getBoolean("firstRun", true)
     }
 
-    private fun setFitstRun(firstRun: Boolean) {
+    private fun setFirstRun(firstRun: Boolean) {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             putBoolean("firstRun", firstRun)
             commit()
         }
     }
-
 
     private fun saveTitle(title: String) {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
