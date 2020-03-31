@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.day_view.view.*
 
 
-class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
+class DaysRecyclerViewAdapter(
+    private val days: List<Boolean>,
+    var today: Boolean
+) :
     RecyclerView.Adapter<DaysRecyclerViewAdapter.DaysViewHolder>() {
 
     class DaysViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -33,7 +36,7 @@ class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
                 days[position] -> {
                     context.resources.getDrawable(R.drawable.day_checked)
                 }
-                position == checkPosition -> {
+                position == checkPosition && !today -> {
                     context.resources.getDrawable(R.drawable.day_current)
                 }
                 else -> {
@@ -46,7 +49,7 @@ class DaysRecyclerViewAdapter(private val days: List<Boolean>) :
             days[position] -> {
                 10f
             }
-            position == checkPosition -> {
+            position == checkPosition && !today-> {
                 20f
             }
             else -> {

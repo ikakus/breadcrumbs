@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateUtils.isToday
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkButtonState() {
         findViewById<Button>(R.id.fab).apply {
+            isEnabled = !isToday(getLastCheckedDay().time)
+
             val checkCount = days.count { it }
             if (checkCount == 0) {
                 this.text = "Start"
@@ -130,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             days = getDays().toMutableList()
         }
 
-        viewAdapter = DaysRecyclerViewAdapter(days)
+        viewAdapter = DaysRecyclerViewAdapter(days, isToday(getLastCheckedDay().time))
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
             setHasFixedSize(true)
@@ -165,10 +168,12 @@ class MainActivity : AppCompatActivity() {
         incrementPosition()
         days[checkPosition - 1] = true
         updateCounter()
-        viewAdapter.setCheckPosition(checkPosition)
-        viewAdapter.notifyDataSetChanged()
         saveDays()
         saveLastCheckday()
+
+        viewAdapter.setCheckPosition(checkPosition)
+        viewAdapter.today = isToday(getLastCheckedDay().time)
+        viewAdapter.notifyDataSetChanged()
         checkButtonState()
     }
 
@@ -182,7 +187,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun getLastCheckedDay(): Date {
         val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        return Date(sharedPref.getLong("lastCheckDay", Date().time))
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.DAY_OF_YEAR, -1)
+        return Date(sharedPref.getLong("lastCheckDay", cal.time.time))
     }
 
     private fun saveTitle(title: String) {
