@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
 
         viewManager = GridLayoutManager(this, 6)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         initDays()
         initTitle()
         updateCounter()
