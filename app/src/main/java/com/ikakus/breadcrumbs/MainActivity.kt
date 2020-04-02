@@ -1,5 +1,6 @@
 package com.ikakus.breadcrumbs
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkButtonState() {
-        findViewById<Button>(R.id.fab).apply {
+        findViewById<Button>(R.id.button).apply {
             isEnabled = !isToday(getLastCheckedDay().time)
 
             val checkCount = days.count { it }
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        findViewById<Button>(R.id.fab).apply {
+        findViewById<Button>(R.id.button).apply {
             this.setOnClickListener {
                 check()
             }
@@ -129,6 +131,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initDays() {
         if (getDays().isEmpty()) {
             for (a in 1..strikeLength) {
@@ -144,6 +147,12 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+        }
+
+        findViewById<TextView>(R.id.first_date).apply{
+            val date = getFirstCheckedDay()
+            val dateFormat = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+            text = dateFormat.format(date)
         }
 
     }
@@ -170,6 +179,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun check() {
+        val checkCount = days.count { it }
+        if (checkCount == 0) {
+            saveFirstCheckday()
+        }
         incrementPosition()
         days[checkPosition - 1] = true
         updateCounter()
@@ -180,6 +193,19 @@ class MainActivity : AppCompatActivity() {
         viewAdapter.today = isToday(getLastCheckedDay().time)
         viewAdapter.notifyDataSetChanged()
         checkButtonState()
+    }
+
+    private fun saveFirstCheckday() {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putLong("firstCheckDay", Date().time)
+            commit()
+        }
+    }
+
+    private fun getFirstCheckedDay(): Date {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        return Date(sharedPref.getLong("firstCheckDay", Date().time))
     }
 
     private fun saveLastCheckday() {

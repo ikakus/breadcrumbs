@@ -49,7 +49,7 @@ class DaysRecyclerViewAdapter(
             days[position] -> {
                 10f
             }
-            position == checkPosition && !today-> {
+            position == checkPosition && !today -> {
                 20f
             }
             else -> {
