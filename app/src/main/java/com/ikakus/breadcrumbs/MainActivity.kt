@@ -1,6 +1,5 @@
 package com.ikakus.breadcrumbs
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -40,11 +39,37 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        if(checkIfFailed()){
+            resetAll()
+        }
+
         initDays()
         initTitle()
         updateCounter()
         setListeners()
         checkButtonState()
+
+    }
+
+    private fun resetAll() {
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            clear()
+            commit()
+        }
+    }
+
+    private fun checkIfFailed():Boolean{
+        val lastDay = getLastCheckedDay()
+        val calendarLastday = Calendar.getInstance().apply {
+            time = lastDay
+        }
+
+        val calendarToday = Calendar.getInstance().apply {
+            time = Date()
+        }
+        val maxDaysDiff = 1
+        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
     }
 
     private fun checkButtonState() {
@@ -131,7 +156,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun initDays() {
         if (getDays().isEmpty()) {
             for (a in 1..strikeLength) {
@@ -271,4 +295,8 @@ class MainActivity : AppCompatActivity() {
         }
         return false
     }
+}
+
+private fun Calendar.getDay(): Int {
+    return get(Calendar.DAY_OF_YEAR)
 }
