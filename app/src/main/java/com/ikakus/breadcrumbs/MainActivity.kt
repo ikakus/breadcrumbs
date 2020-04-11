@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.format.DateUtils
 import android.text.format.DateUtils.isToday
 import android.widget.Button
 import android.widget.EditText
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private val strikeLength = 12
     private var checkPosition = 1
 
+    private val storage = Storage(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,8 +42,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if(checkIfFailed()){
-            resetAll()
+        if (storage.checkIfFailed()) {
+            storage.resetAll()
         }
 
         initDays()
@@ -51,30 +54,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun resetAll() {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            clear()
-            commit()
-        }
-    }
-
-    private fun checkIfFailed():Boolean{
-        val lastDay = getLastCheckedDay()
-        val calendarLastday = Calendar.getInstance().apply {
-            time = lastDay
-        }
-
-        val calendarToday = Calendar.getInstance().apply {
-            time = Date()
-        }
-        val maxDaysDiff = 1
-        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
-    }
-
     private fun checkButtonState() {
         findViewById<Button>(R.id.button_check).apply {
-            isEnabled = !isToday(getLastCheckedDay().time)
+            isEnabled = !isToday(storage.getLastCheckedDay().time)
 
             val checkCount = days.count { it }
             if (checkCount == 0) {
@@ -95,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initTitle() {
         findViewById<EditText>(R.id.title).apply {
-            val title = loadTitle()
+            val title = storage.loadTitle()
             if (title.isNotEmpty()) {
                 this.setText(title)
             }
@@ -127,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                     timer.schedule(
                         object : TimerTask() {
                             override fun run() {
-                                saveTitle(title)
+                                storage.saveTitle(title)
                                 runOnUiThread {
                                     Toast.makeText(
                                         this@MainActivity,
@@ -157,15 +139,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDays() {
-        if (getDays().isEmpty()) {
+        if (storage.getDays().isEmpty()) {
             for (a in 1..strikeLength) {
                 days.add(false)
             }
         } else {
-            days = getDays().toMutableList()
+            days = storage.getDays().toMutableList()
         }
 
-        viewAdapter = DaysRecyclerViewAdapter(days, isToday(getLastCheckedDay().time))
+        viewAdapter = DaysRecyclerViewAdapter(days, isToday(storage.getLastCheckedDay().time))
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
             setHasFixedSize(true)
@@ -173,8 +155,8 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
         }
 
-        findViewById<TextView>(R.id.first_date).apply{
-            val date = getFirstCheckedDay()
+        findViewById<TextView>(R.id.first_date).apply {
+            val date = storage.getFirstCheckedDay()
             val dateFormat = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
             text = dateFormat.format(date)
         }
@@ -197,7 +179,7 @@ class MainActivity : AppCompatActivity() {
             updateCounter()
             viewAdapter.setCheckPosition(checkPosition)
             viewAdapter.notifyDataSetChanged()
-            saveDays()
+            storage.saveDays(days)
             checkButtonState()
         }
     }
@@ -205,79 +187,18 @@ class MainActivity : AppCompatActivity() {
     private fun check() {
         val checkCount = days.count { it }
         if (checkCount == 0) {
-            saveFirstCheckday()
+            storage.saveFirstCheckday()
         }
         incrementPosition()
         days[checkPosition - 1] = true
         updateCounter()
-        saveDays()
-        saveLastCheckday()
+        storage.saveDays(days)
+        storage.saveLastCheckday()
 
         viewAdapter.setCheckPosition(checkPosition)
-        viewAdapter.today = isToday(getLastCheckedDay().time)
+        viewAdapter.today = DateUtils.isToday(storage.getLastCheckedDay().time)
         viewAdapter.notifyDataSetChanged()
         checkButtonState()
-    }
-
-    private fun saveFirstCheckday() {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putLong("firstCheckDay", Date().time)
-            commit()
-        }
-    }
-
-    private fun getFirstCheckedDay(): Date {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        return Date(sharedPref.getLong("firstCheckDay", Date().time))
-    }
-
-    private fun saveLastCheckday() {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putLong("lastCheckDay", Date().time)
-            commit()
-        }
-    }
-
-    private fun getLastCheckedDay(): Date {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -1)
-        return Date(sharedPref.getLong("lastCheckDay", cal.time.time))
-    }
-
-    private fun saveTitle(title: String) {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            putString("title", title)
-            commit()
-        }
-    }
-
-    private fun loadTitle(): String {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        return sharedPref.getString("title", "").orEmpty()
-    }
-
-    private fun saveDays() {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        with(sharedPref.edit()) {
-            val jsonText: String = Gson().toJson(days)
-            putString("days", jsonText)
-            commit()
-        }
-    }
-
-    private fun getDays(): List<Boolean> {
-        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
-        val savedString = sharedPref.getString("days", null)
-        savedString?.let {
-            val type = object : TypeToken<List<Boolean>>() {}.type
-            val days = Gson().fromJson<List<Boolean>>(savedString, type)
-
-            return days.toMutableList()
-        } ?: return emptyList()
     }
 
     private fun decrementPosition(): Boolean {
@@ -295,8 +216,4 @@ class MainActivity : AppCompatActivity() {
         }
         return false
     }
-}
-
-private fun Calendar.getDay(): Int {
-    return get(Calendar.DAY_OF_YEAR)
 }
