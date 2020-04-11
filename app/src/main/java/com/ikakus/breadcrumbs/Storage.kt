@@ -6,9 +6,10 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
 
-class Storage(val context: Context) {
+class Storage(context: Context) {
 
-    private val sharedPref = context.getSharedPreferences("Days", Context.MODE_PRIVATE)
+    private var sharedPref =
+        context.getSharedPreferences("Days", Context.MODE_PRIVATE)
 
     fun resetAll() {
         with(sharedPref.edit()) {

@@ -29,13 +29,15 @@ class MainActivity : AppCompatActivity() {
     private val strikeLength = 12
     private var checkPosition = 1
 
-    private val storage = Storage(this)
+    private lateinit var storage:Storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         viewManager = GridLayoutManager(this, 6)
+
+        storage = Storage(this)
 
     }
 
