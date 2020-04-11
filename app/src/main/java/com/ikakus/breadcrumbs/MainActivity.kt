@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkButtonState() {
-        findViewById<Button>(R.id.button).apply {
+        findViewById<Button>(R.id.button_check).apply {
             isEnabled = !isToday(getLastCheckedDay().time)
 
             val checkCount = days.count { it }
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        findViewById<Button>(R.id.button).apply {
+        findViewById<Button>(R.id.button_check).apply {
             this.setOnClickListener {
                 check()
             }
