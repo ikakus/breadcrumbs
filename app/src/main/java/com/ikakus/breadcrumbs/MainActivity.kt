@@ -1,15 +1,14 @@
 package com.ikakus.breadcrumbs
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateUtils
 import android.text.format.DateUtils.isToday
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val strikeLength = 12
     private var checkPosition = 1
 
-    private lateinit var storage:Storage
+    private lateinit var storage: Storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +42,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        if (storage.checkIfFailed()) {
-            storage.resetAll()
-        }
-
+        setupStorage()
         initDays()
         initTitle()
         updateCounter()
         setListeners()
         checkButtonState()
+    }
 
+    private fun setupStorage() {
+        if (storage.checkIfFailed()) {
+            storage.resetAll()
+        }
     }
 
     private fun checkButtonState() {
@@ -96,6 +96,27 @@ class MainActivity : AppCompatActivity() {
                 unCheck()
                 true
             }
+        }
+
+        findViewById<Button>(R.id.button_timer).apply {
+            this.setOnClickListener {
+                // Get Current Date
+
+                val cal = Calendar.getInstance();
+                val hour = cal.get(Calendar.HOUR_OF_DAY);
+                val minute = cal.get(Calendar.MINUTE);
+                val datePickerDialog = TimePickerDialog(
+                    context,
+                    TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+//                        TODO("not implemented")
+                    },
+                    hour,
+                    minute,
+                    true
+                )
+                datePickerDialog.show()
+            }
+
         }
 
         findViewById<EditText>(R.id.title).apply {
