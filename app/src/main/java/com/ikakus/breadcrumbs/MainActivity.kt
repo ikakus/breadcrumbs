@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateUtils
 import android.text.format.DateUtils.isToday
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -105,9 +106,10 @@ class MainActivity : AppCompatActivity() {
             this.setOnClickListener {
                 // Get Current Date
 
-                val cal = Calendar.getInstance();
-                val hour = cal.get(Calendar.HOUR_OF_DAY);
-                val minute = cal.get(Calendar.MINUTE);
+                val cal = Calendar.getInstance()
+                val hour = cal.get(Calendar.HOUR_OF_DAY)
+                val min = cal.get(Calendar.MINUTE)
+                Log.d("tag" ,cal.toString())
                 val datePickerDialog = TimePickerDialog(
                     context,
                     TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
@@ -119,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
                     },
                     hour,
-                    minute,
+                    min,
                     true
                 )
                 datePickerDialog.show()
@@ -170,6 +172,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initDays() {
+        days = mutableListOf()
         if (storage.getDays().isEmpty()) {
             for (a in 1..strikeLength) {
                 days.add(false)
