@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var storage: Storage
 
+    private var alarmHelper: AlarmHelper? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         viewManager = GridLayoutManager(this, 6)
 
         storage = Storage(this)
+        alarmHelper = AlarmHelper(this)
 
     }
 
@@ -108,7 +111,12 @@ class MainActivity : AppCompatActivity() {
                 val datePickerDialog = TimePickerDialog(
                     context,
                     TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-//                        TODO("not implemented")
+                        Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, hourOfDay)
+                            set(Calendar.MINUTE, minute)
+                            alarmHelper?.setAlaram(this)
+                        }
+
                     },
                     hour,
                     minute,
