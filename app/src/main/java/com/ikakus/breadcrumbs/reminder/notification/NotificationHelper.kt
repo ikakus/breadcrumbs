@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs.notification
+package com.ikakus.breadcrumbs.reminder.notification
 
 import android.R
 import android.app.Notification

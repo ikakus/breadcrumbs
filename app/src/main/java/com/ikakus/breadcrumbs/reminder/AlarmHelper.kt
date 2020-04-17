@@ -6,8 +6,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.ikakus.breadcrumbs.notification.NotificationPublisher
-import com.ikakus.breadcrumbs.notification.getNotification
+import com.ikakus.breadcrumbs.reminder.notification.NotificationPublisher
+import com.ikakus.breadcrumbs.reminder.notification.getNotification
 import java.util.*
 
 

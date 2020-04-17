@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.ikakus.breadcrumbs.notification.NotificationPublisher" />
+        <receiver android:name="com.ikakus.breadcrumbs.reminder.notification.NotificationPublisher" />
     </application>
 
 </manifest>
