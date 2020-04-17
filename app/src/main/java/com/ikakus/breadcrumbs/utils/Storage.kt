@@ -1,7 +1,6 @@
-package com.ikakus.breadcrumbs
+package com.ikakus.breadcrumbs.utils
 
 import android.content.Context
-import android.text.format.DateUtils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*

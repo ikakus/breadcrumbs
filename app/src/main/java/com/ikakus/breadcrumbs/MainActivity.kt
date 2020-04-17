@@ -1,8 +1,6 @@
 package com.ikakus.breadcrumbs
 
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,8 +11,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.ikakus.breadcrumbs.daylist.DaysRecyclerViewAdapter
+import com.ikakus.breadcrumbs.reminder.AlarmHelper
+import com.ikakus.breadcrumbs.utils.Storage
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -181,7 +180,10 @@ class MainActivity : AppCompatActivity() {
             days = storage.getDays().toMutableList()
         }
 
-        viewAdapter = DaysRecyclerViewAdapter(days, isToday(storage.getLastCheckedDay().time))
+        viewAdapter = DaysRecyclerViewAdapter(
+            days,
+            isToday(storage.getLastCheckedDay().time)
+        )
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler).apply {
             setHasFixedSize(true)

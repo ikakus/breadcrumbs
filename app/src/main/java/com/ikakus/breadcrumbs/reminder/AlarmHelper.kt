@@ -1,17 +1,21 @@
-package com.ikakus.breadcrumbs
+package com.ikakus.breadcrumbs.reminder
 
 import android.app.AlarmManager
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
+import com.ikakus.breadcrumbs.notification.NotificationPublisher
+import com.ikakus.breadcrumbs.notification.getNotification
 import java.util.*
 
 
 class AlarmHelper(val context: Context) {
 
     fun setAlaram(calendar: Calendar) {
-        val notification = getNotification(context, "lolol")
+        val notification =
+            getNotification(context, "lolol")
         scheduleNotification(notification, calendar)
     }
 
@@ -34,5 +38,7 @@ class AlarmHelper(val context: Context) {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+
+        Toast.makeText(context, "Reminder set", Toast.LENGTH_SHORT).show()
     }
 }

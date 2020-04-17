@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs
+package com.ikakus.breadcrumbs.daylist
 
 import android.graphics.Rect
 import android.view.View

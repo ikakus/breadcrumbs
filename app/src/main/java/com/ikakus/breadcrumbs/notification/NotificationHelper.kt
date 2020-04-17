@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs
+package com.ikakus.breadcrumbs.notification
 
 import android.R
 import android.app.Notification
@@ -17,5 +17,7 @@ fun show(context: Context) {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-    notificationManager.notify(111, getNotification(context, "lol"))
+    notificationManager.notify(111,
+        getNotification(context, "lol")
+    )
 }

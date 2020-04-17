@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs
+package com.ikakus.breadcrumbs.utils
 
 import java.util.*
 
