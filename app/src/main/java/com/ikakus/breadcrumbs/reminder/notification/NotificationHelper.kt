@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.NotificationManager
 import android.content.Context
 
+//TODO add support for newer API veriosns
 fun getNotification(context: Context, title: String): Notification {
     val builder: Notification.Builder = Notification.Builder(context)
     builder.setContentTitle("Scheduled Notification")
