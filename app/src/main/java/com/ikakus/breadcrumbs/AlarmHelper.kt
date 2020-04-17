@@ -34,6 +34,5 @@ class AlarmHelper(val context: Context) {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
-        show(context)
     }
 }
