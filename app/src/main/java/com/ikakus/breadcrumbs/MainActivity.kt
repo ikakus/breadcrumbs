@@ -7,12 +7,15 @@ import android.text.TextWatcher
 import android.text.format.DateUtils
 import android.text.format.DateUtils.isToday
 import android.util.Log
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ikakus.breadcrumbs.daylist.DaysRecyclerViewAdapter
 import com.ikakus.breadcrumbs.reminder.AlarmHelper
+import com.ikakus.breadcrumbs.strike.ongoing.DaysRecyclerViewAdapter
 import com.ikakus.breadcrumbs.utils.Storage
 import java.text.SimpleDateFormat
 import java.util.*
@@ -104,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button_timer).apply {
             this.setOnClickListener {
                 // Get Current Date
-
+                // Navigate to activity
                 val cal = Calendar.getInstance()
                 val hour = cal.get(Calendar.HOUR_OF_DAY)
                 val min = cal.get(Calendar.MINUTE)

@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs.daylist
+package com.ikakus.breadcrumbs.strike.ongoing
 
 import android.content.Context
 import android.view.LayoutInflater
