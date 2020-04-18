@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs.strike.ongoing
+package com.ikakus.breadcrumbs.strike.active
 
 import android.graphics.Rect
 import android.view.View

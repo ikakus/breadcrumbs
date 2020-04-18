@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.reminder.AlarmHelper
-import com.ikakus.breadcrumbs.strike.ongoing.DaysRecyclerViewAdapter
+import com.ikakus.breadcrumbs.strike.active.DaysRecyclerViewAdapter
 import com.ikakus.breadcrumbs.utils.Storage
 import java.text.SimpleDateFormat
 import java.util.*
