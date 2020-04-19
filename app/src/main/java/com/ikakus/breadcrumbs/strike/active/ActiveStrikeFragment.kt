@@ -93,7 +93,7 @@ class ActiveStrikeFragment : Fragment() {
 
     private fun initTitle() {
         view?.findViewById<EditText>(R.id.title)?.apply {
-            val title = storage.loadTitle()
+            val title = storage.getTitle()
             if (title.isNotEmpty()) {
                 this.setText(title)
             }
@@ -152,7 +152,7 @@ class ActiveStrikeFragment : Fragment() {
                     timer.schedule(
                         object : TimerTask() {
                             override fun run() {
-                                storage.saveTitle(title)
+                                storage.setTitle(title)
                                 requireActivity().runOnUiThread {
                                     Toast.makeText(
                                         requireContext(),

@@ -16,8 +16,8 @@ class MainActivity : AppCompatActivity() {
         storage = Storage(this)
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val days = storage.getDays().size
-        val fragment = if (days > 0) {
+        val active = storage.getActive()
+        val fragment = if (active) {
             ActiveStrikeFragment()
         } else {
             NewStrikeFragment()

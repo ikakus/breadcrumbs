@@ -54,15 +54,26 @@ class Storage(context: Context) {
         return Date(sharedPref.getLong("lastCheckDay", cal.time.time))
     }
 
-    fun saveTitle(title: String) {
+    fun setTitle(title: String) {
         with(sharedPref.edit()) {
             putString("title", title)
             commit()
         }
     }
 
-    fun loadTitle(): String {
+    fun getTitle(): String {
         return sharedPref.getString("title", "").orEmpty()
+    }
+
+    fun getActive(): Boolean {
+        return sharedPref.getBoolean("active", false)
+    }
+
+    fun setActive(active: Boolean) {
+        with(sharedPref.edit()) {
+            putBoolean("active", active)
+            commit()
+        }
     }
 
     fun saveDays(days: MutableList<Boolean>) {
