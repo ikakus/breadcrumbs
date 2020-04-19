@@ -22,20 +22,7 @@ import com.ikakus.breadcrumbs.utils.Storage
 import java.text.SimpleDateFormat
 import java.util.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ActiveStrikeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ActiveStrikeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private var recyclerView: RecyclerView? = null
     private lateinit var viewAdapter: DaysRecyclerViewAdapter
@@ -51,10 +38,7 @@ class ActiveStrikeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
         viewManager = GridLayoutManager(requireContext(), 6)
 
         storage = Storage(requireContext())
@@ -72,7 +56,8 @@ class ActiveStrikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupStorage()
-        initDays()
+        days = initDays()
+        initRecycler(days)
         initTitle()
         updateCounter()
         setListeners()
@@ -196,15 +181,7 @@ class ActiveStrikeFragment : Fragment() {
         }
     }
 
-    private fun initDays() {
-        days = mutableListOf()
-        if (storage.getDays().isEmpty()) {
-            for (a in 1..strikeLength) {
-                days.add(false)
-            }
-        } else {
-            days = storage.getDays().toMutableList()
-        }
+    private fun initRecycler(days: MutableList<Boolean>) {
 
         viewAdapter = DaysRecyclerViewAdapter(
             days,
@@ -223,6 +200,18 @@ class ActiveStrikeFragment : Fragment() {
             text = dateFormat.format(date)
         }
 
+    }
+
+    private fun initDays(): MutableList<Boolean> {
+        var days = mutableListOf<Boolean>()
+        if (storage.getDays().isEmpty()) {
+            for (a in 1..strikeLength) {
+                days.add(false)
+            }
+        } else {
+            days = storage.getDays().toMutableList()
+        }
+        return days
     }
 
     private fun updateCounter() {
@@ -279,23 +268,4 @@ class ActiveStrikeFragment : Fragment() {
         return false
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ActiveStrikeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ActiveStrikeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
