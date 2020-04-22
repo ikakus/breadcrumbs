@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
@@ -25,11 +26,12 @@ class NewStrikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val title = view.findViewById<EditText>(R.id.title)
         view.findViewById<Button>(R.id.button_start)?.apply {
             val storage = Storage(requireContext())
             this.setOnClickListener {
                 storage.setActive(true)
-
+                storage.setTitle(title.text.toString())
                 val intent = Intent(NEW_STRIKE_STARTED)
                 LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
             }

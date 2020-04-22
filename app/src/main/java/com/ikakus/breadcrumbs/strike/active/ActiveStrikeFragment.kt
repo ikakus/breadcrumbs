@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -55,7 +54,6 @@ class ActiveStrikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupStorage()
         days = initDays()
         initRecycler(days)
         initTitle()
@@ -64,15 +62,11 @@ class ActiveStrikeFragment : Fragment() {
         checkButtonState()
     }
 
-    private fun setupStorage() {
-        if (storage.checkIfFailed()) {
-            storage.resetAll()
-        }
-    }
+
 
     private fun checkButtonState() {
         view?.findViewById<Button>(R.id.button_check)?.apply {
-            isEnabled = !DateUtils.isToday(storage.getLastCheckedDay().time)
+            isEnabled = !DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
 
             val checkCount = days.count { it }
             if (checkCount == 0) {
@@ -92,10 +86,10 @@ class ActiveStrikeFragment : Fragment() {
     }
 
     private fun initTitle() {
-        view?.findViewById<EditText>(R.id.title)?.apply {
+        view?.findViewById<TextView>(R.id.title)?.apply {
             val title = storage.getTitle()
             if (title.isNotEmpty()) {
-                this.setText(title)
+                this.text = title
             }
         }
     }
@@ -139,7 +133,7 @@ class ActiveStrikeFragment : Fragment() {
 
         }
 
-        view?.findViewById<EditText>(R.id.title)?.apply {
+        view?.findViewById<TextView>(R.id.title)?.apply {
             addTextChangedListener(object : TextWatcher {
                 private var timer: Timer = Timer()
                 private val DELAY: Long = 1000 // milliseconds
@@ -185,7 +179,7 @@ class ActiveStrikeFragment : Fragment() {
 
         viewAdapter = DaysRecyclerViewAdapter(
             days,
-            DateUtils.isToday(storage.getLastCheckedDay().time)
+            DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
         )
 
         recyclerView = view?.findViewById<RecyclerView>(R.id.recycler)?.apply {
@@ -247,7 +241,7 @@ class ActiveStrikeFragment : Fragment() {
         storage.saveLastCheckday()
 
         viewAdapter.setCheckPosition(checkPosition)
-        viewAdapter.today = DateUtils.isToday(storage.getLastCheckedDay().time)
+        viewAdapter.today = DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
         viewAdapter.notifyDataSetChanged()
         checkButtonState()
     }

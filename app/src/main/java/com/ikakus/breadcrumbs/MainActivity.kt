@@ -19,8 +19,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        storage = Storage(this)
+        setupStorage()
         setScreens()
+    }
+
+    private fun setupStorage() {
+        storage = Storage(this)
+        if (storage.checkIfFailed()) {
+            storage.resetAll()
+        }
     }
 
     private fun setScreens() {

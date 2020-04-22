@@ -20,7 +20,7 @@ class Storage(context: Context) {
     fun checkIfFailed(): Boolean {
         val lastDay = getLastCheckedDay()
         val calendarLastday = Calendar.getInstance().apply {
-            time = lastDay
+            time = lastDay ?: Date()
         }
 
         val calendarToday = Calendar.getInstance().apply {
@@ -48,10 +48,13 @@ class Storage(context: Context) {
         }
     }
 
-    fun getLastCheckedDay(): Date {
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.DAY_OF_YEAR, -1)
-        return Date(sharedPref.getLong("lastCheckDay", cal.time.time))
+    fun getLastCheckedDay(): Date? {
+        val millis = sharedPref.getLong("lastCheckDay", -1)
+        if (millis < 0) {
+            return null
+        } else {
+            return Date(millis)
+        }
     }
 
     fun setTitle(title: String) {
