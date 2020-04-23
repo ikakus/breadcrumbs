@@ -5,10 +5,18 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.util.*
 
+private const val FIRST_CHECK_DAY = "firstCheckDay"
+private const val DB_NAME = "Days"
+private const val LAST_CHECK_DAY = "lastCheckDay"
+private const val TITLE = "title"
+private const val ACTIVE = "active"
+private const val DAYS = "days"
+private const val HISTORY = "history"
+
 class Storage(context: Context) {
 
     private var sharedPref =
-        context.getSharedPreferences("Days", Context.MODE_PRIVATE)
+        context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE)
 
     fun resetAll() {
         with(sharedPref.edit()) {
@@ -32,24 +40,24 @@ class Storage(context: Context) {
 
     fun saveFirstCheckday() {
         with(sharedPref.edit()) {
-            putLong("firstCheckDay", java.util.Date().time)
+            putLong(FIRST_CHECK_DAY, Date().time)
             commit()
         }
     }
 
     fun getFirstCheckedDay(): Date {
-        return Date(sharedPref.getLong("firstCheckDay", Date().time))
+        return Date(sharedPref.getLong(FIRST_CHECK_DAY, Date().time))
     }
 
     fun saveLastCheckday() {
         with(sharedPref.edit()) {
-            putLong("lastCheckDay", java.util.Date().time)
+            putLong(LAST_CHECK_DAY, Date().time)
             commit()
         }
     }
 
     fun getLastCheckedDay(): Date? {
-        val millis = sharedPref.getLong("lastCheckDay", -1)
+        val millis = sharedPref.getLong(LAST_CHECK_DAY, -1)
         if (millis < 0) {
             return null
         } else {
@@ -59,22 +67,22 @@ class Storage(context: Context) {
 
     fun setTitle(title: String) {
         with(sharedPref.edit()) {
-            putString("title", title)
+            putString(title, title)
             commit()
         }
     }
 
     fun getTitle(): String {
-        return sharedPref.getString("title", "").orEmpty()
+        return sharedPref.getString(TITLE, "").orEmpty()
     }
 
     fun getActive(): Boolean {
-        return sharedPref.getBoolean("active", false)
+        return sharedPref.getBoolean(ACTIVE, false)
     }
 
     fun setActive(active: Boolean) {
         with(sharedPref.edit()) {
-            putBoolean("active", active)
+            putBoolean(ACTIVE, active)
             commit()
         }
     }
@@ -82,13 +90,13 @@ class Storage(context: Context) {
     fun saveDays(days: MutableList<Boolean>) {
         with(sharedPref.edit()) {
             val jsonText: String = com.google.gson.Gson().toJson(days)
-            putString("days", jsonText)
+            putString(DAYS, jsonText)
             commit()
         }
     }
 
     fun getDays(): List<Boolean> {
-        val savedString = sharedPref.getString("days", null)
+        val savedString = sharedPref.getString(DAYS, null)
         savedString?.let {
             val type = object : TypeToken<List<Boolean>>() {}.type
             return Gson().fromJson(savedString, type)
@@ -99,13 +107,13 @@ class Storage(context: Context) {
         val history: List<List<Boolean>> = arrayListOf(days)
         with(sharedPref.edit()) {
             val jsonText: String = com.google.gson.Gson().toJson(history)
-            putString("history", jsonText)
+            putString(HISTORY, jsonText)
             commit()
         }
     }
 
     fun getHistory(): List<List<Boolean>> {
-        val savedString = sharedPref.getString("history", null)
+        val savedString = sharedPref.getString(HISTORY, null)
         savedString?.let {
             val type = object : TypeToken<List<List<Boolean>>>() {}.type
             return Gson().fromJson(savedString, type)
