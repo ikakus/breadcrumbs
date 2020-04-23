@@ -91,9 +91,24 @@ class Storage(context: Context) {
         val savedString = sharedPref.getString("days", null)
         savedString?.let {
             val type = object : TypeToken<List<Boolean>>() {}.type
-            val days = Gson().fromJson<List<Boolean>>(savedString, type)
+            return Gson().fromJson(savedString, type)
+        } ?: return emptyList()
+    }
 
-            return days.toMutableList()
+    fun addToHistory(days: List<Boolean>) {
+        val history: List<List<Boolean>> = arrayListOf(days)
+        with(sharedPref.edit()) {
+            val jsonText: String = com.google.gson.Gson().toJson(history)
+            putString("history", jsonText)
+            commit()
+        }
+    }
+
+    fun getHistory(): List<List<Boolean>> {
+        val savedString = sharedPref.getString("history", null)
+        savedString?.let {
+            val type = object : TypeToken<List<List<Boolean>>>() {}.type
+            return Gson().fromJson(savedString, type)
         } ?: return emptyList()
     }
 }
