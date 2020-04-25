@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupStorage() {
         storage = Storage(this)
         if (checkIfFailed(storage)) {
-            storage.resetAll()
+            storage.resetStrike()
         }
     }
 

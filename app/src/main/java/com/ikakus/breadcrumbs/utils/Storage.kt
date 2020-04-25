@@ -18,9 +18,12 @@ class Storage(context: Context) {
     private var sharedPref =
         context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE)
 
-    fun resetAll() {
+    fun resetStrike() {
         with(sharedPref.edit()) {
-            clear()
+            putString(TITLE, "")
+            putLong(LAST_CHECK_DAY, -1)
+            putString(DAYS, "")
+            putBoolean(ACTIVE, false)
             commit()
         }
     }
@@ -45,10 +48,10 @@ class Storage(context: Context) {
 
     fun getLastCheckedDay(): Date? {
         val millis = sharedPref.getLong(LAST_CHECK_DAY, -1)
-        if (millis < 0) {
-            return null
+        return if (millis < 0) {
+            null
         } else {
-            return Date(millis)
+            Date(millis)
         }
     }
 
