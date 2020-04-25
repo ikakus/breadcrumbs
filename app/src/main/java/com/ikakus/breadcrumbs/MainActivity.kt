@@ -11,6 +11,8 @@ import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
 import com.ikakus.breadcrumbs.utils.Storage
+import com.ikakus.breadcrumbs.utils.getDay
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -25,9 +27,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupStorage() {
         storage = Storage(this)
-        if (storage.checkIfFailed()) {
+        if (checkIfFailed(storage)) {
             storage.resetAll()
         }
+    }
+
+    private fun checkIfFailed(storage: Storage): Boolean {
+        val lastDay = storage.getLastCheckedDay()
+        val calendarLastday = Calendar.getInstance().apply {
+            time = lastDay ?: Date()
+        }
+
+        val calendarToday = Calendar.getInstance().apply {
+            time = Date()
+        }
+        val maxDaysDiff = 1
+        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
     }
 
     private fun setScreens() {

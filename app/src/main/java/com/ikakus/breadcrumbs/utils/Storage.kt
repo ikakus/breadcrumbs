@@ -25,19 +25,6 @@ class Storage(context: Context) {
         }
     }
 
-    fun checkIfFailed(): Boolean {
-        val lastDay = getLastCheckedDay()
-        val calendarLastday = Calendar.getInstance().apply {
-            time = lastDay ?: Date()
-        }
-
-        val calendarToday = Calendar.getInstance().apply {
-            time = Date()
-        }
-        val maxDaysDiff = 1
-        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
-    }
-
     fun saveFirstCheckday() {
         with(sharedPref.edit()) {
             putLong(FIRST_CHECK_DAY, Date().time)
