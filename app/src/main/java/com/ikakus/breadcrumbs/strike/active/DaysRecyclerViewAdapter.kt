@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.day_view.view.*
 
 
 class DaysRecyclerViewAdapter(
-    private val days: List<Boolean>,
+    private val days: List<Long>,
     var today: Boolean
 ) :
     RecyclerView.Adapter<DaysRecyclerViewAdapter.DaysViewHolder>() {
@@ -36,7 +36,7 @@ class DaysRecyclerViewAdapter(
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
         holder.itemView.day_view_layout_back.setBackgroundDrawable(
             when {
-                days[position] -> {
+                days[position] > 0 -> {
                     context.resources.getDrawable(R.drawable.day_checked)
                 }
                 position == checkPosition && !today -> {
@@ -49,7 +49,7 @@ class DaysRecyclerViewAdapter(
         )
 
         holder.itemView.day_view_layout_back.elevation = when {
-            days[position] -> {
+            days[position] > 0 -> {
                 10f
             }
             position == checkPosition && !today -> {

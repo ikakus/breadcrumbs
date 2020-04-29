@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.reminder.AlarmHelper
+import com.ikakus.breadcrumbs.utils.STRIKELENGTH
 import com.ikakus.breadcrumbs.utils.Storage
 import java.text.SimpleDateFormat
 import java.util.*
@@ -24,8 +25,7 @@ class ActiveStrikeFragment : Fragment() {
     private lateinit var viewAdapter: DaysRecyclerViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
-    private var days: MutableList<Boolean> = mutableListOf()
-    private val strikeLength = 12
+    private var days: MutableList<Long> = mutableListOf()
     private var checkPosition = 1
 
     private lateinit var storage: Storage
@@ -51,7 +51,8 @@ class ActiveStrikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        days = initDays()
+        val storage = Storage(requireContext())
+        days = storage.getDays().toMutableList()
         initRecycler(days)
         initTitle()
         updateCounter()
@@ -63,18 +64,18 @@ class ActiveStrikeFragment : Fragment() {
         view?.findViewById<Button>(R.id.button_check)?.apply {
             isEnabled = !DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
 
-            val checkCount = days.count { it }
+            val checkCount = days.count { it > 0 }
             if (checkCount == 0) {
                 this.text = "Start"
             } else {
                 this.text = "Check"
             }
 
-            if (checkCount == (strikeLength - 1)) {
+            if (checkCount == (STRIKELENGTH - 1)) {
                 this.text = "Finish"
             }
 
-            if (checkCount == (strikeLength)) {
+            if (checkCount == (STRIKELENGTH)) {
                 this.text = "All done!"
             }
         }
@@ -130,7 +131,7 @@ class ActiveStrikeFragment : Fragment() {
 
     }
 
-    private fun initRecycler(days: MutableList<Boolean>) {
+    private fun initRecycler(days: MutableList<Long>) {
 
         viewAdapter = DaysRecyclerViewAdapter(
             days,
@@ -151,48 +152,36 @@ class ActiveStrikeFragment : Fragment() {
 
     }
 
-    private fun initDays(): MutableList<Boolean> {
-        var days = mutableListOf<Boolean>()
-        if (storage.getDays().isEmpty()) {
-            for (a in 1..strikeLength) {
-                days.add(false)
-            }
-        } else {
-            days = storage.getDays().toMutableList()
-        }
-        return days
-    }
-
     private fun updateCounter() {
         view?.findViewById<TextView>(R.id.count)?.apply {
-            val count = days.count { it }
+            val count = days.count { it > 0 }
             checkPosition = count
-            text = "$count/$strikeLength"
+            text = "$count/$STRIKELENGTH"
             viewAdapter.setCheckPosition(checkPosition)
         }
     }
 
     private fun unCheck() {
         if (checkPosition > 0) {
-            days[checkPosition - 1] = false
+//            days[checkPosition - 1] = false
             decrementPosition()
             updateCounter()
             viewAdapter.setCheckPosition(checkPosition)
             viewAdapter.notifyDataSetChanged()
-            storage.saveDays(days)
+//            storage.saveDays(days)
             checkButtonState()
         }
     }
 
     private fun check() {
-        val checkCount = days.count { it }
+        val checkCount = days.count { it > 0 }
         if (checkCount == 0) {
             storage.saveFirstCheckday()
         }
         incrementPosition()
-        days[checkPosition - 1] = true
+        days[checkPosition - 1] = Date().time
         updateCounter()
-        storage.saveDays(days)
+//        storage.saveDays(days)
         storage.saveLastCheckday()
 
         viewAdapter.setCheckPosition(checkPosition)
@@ -210,7 +199,7 @@ class ActiveStrikeFragment : Fragment() {
     }
 
     private fun incrementPosition(): Boolean {
-        if (checkPosition < strikeLength) {
+        if (checkPosition < STRIKELENGTH) {
             checkPosition++
             return true
         }

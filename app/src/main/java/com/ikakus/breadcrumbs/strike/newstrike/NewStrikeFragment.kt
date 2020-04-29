@@ -30,8 +30,7 @@ class NewStrikeFragment : Fragment() {
         view.findViewById<Button>(R.id.button_start)?.apply {
             val storage = Storage(requireContext())
             this.setOnClickListener {
-                storage.setActive(true)
-                storage.setTitle(title.text.toString())
+                storage.create(title.text.toString())
                 val intent = Intent(NEW_STRIKE_STARTED)
                 LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
             }

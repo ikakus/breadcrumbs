@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupStorage() {
         storage = Storage(this)
         if (checkIfFailed(storage)) {
-            storage.resetStrike()
+            storage.failStrike()
         }
     }
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
     private fun setScreens() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val active = storage.getActive()
+        val active = storage.hasActive()
         val fragment = if (active) {
             ActiveStrikeFragment()
         } else {
