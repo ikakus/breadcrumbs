@@ -95,11 +95,6 @@ class ActiveStrikeFragment : Fragment() {
             this.setOnClickListener {
                 check()
             }
-
-            this.setOnLongClickListener {
-                unCheck()
-                true
-            }
         }
 
         view?.findViewById<Button>(R.id.button_timer)?.apply {
@@ -147,7 +142,11 @@ class ActiveStrikeFragment : Fragment() {
         view?.findViewById<TextView>(R.id.first_date)?.apply {
             val date = storage.getFirstCheckedDay()
             val dateFormat = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
-            text = dateFormat.format(date)
+            text = if (date != null) {
+                dateFormat.format(date)
+            } else {
+                dateFormat.format(Date())
+            }
         }
 
     }
@@ -161,18 +160,6 @@ class ActiveStrikeFragment : Fragment() {
         }
     }
 
-    private fun unCheck() {
-        if (checkPosition > 0) {
-//            days[checkPosition - 1] = false
-            decrementPosition()
-            updateCounter()
-            viewAdapter.setCheckPosition(checkPosition)
-            viewAdapter.notifyDataSetChanged()
-//            storage.saveDays(days)
-            checkButtonState()
-        }
-    }
-
     private fun check() {
         val checkCount = days.count { it > 0 }
         if (checkCount == 0) {
@@ -181,7 +168,6 @@ class ActiveStrikeFragment : Fragment() {
         incrementPosition()
         days[checkPosition - 1] = Date().time
         updateCounter()
-//        storage.saveDays(days)
         storage.saveLastCheckday()
 
         viewAdapter.setCheckPosition(checkPosition)

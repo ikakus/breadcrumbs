@@ -30,9 +30,10 @@ class Storage(context: Context) {
 //        }
     }
 
-    fun getFirstCheckedDay(): Date {
-//        return Date(sharedPref.getLong(FIRST_CHECK_DAY, Date().time))
-        return Date()
+    fun getFirstCheckedDay(): Date? {
+        val active = getActive() ?: return null
+        val day = active.days.firstOrNull { it > 0 } ?: return null
+        return Date(day)
     }
 
     fun saveLastCheckday() {
@@ -43,22 +44,22 @@ class Storage(context: Context) {
     }
 
     fun getLastCheckedDay(): Date? {
-//        val millis = sharedPref.getLong(LAST_CHECK_DAY, -1)
-//        return if (millis < 0) {
-//            null
-//        } else {
-//            Date(millis)
-//        }
-        return Date()
+        val active = getActive() ?: return null
+        val day = active.days.lastOrNull { it > 0 } ?: return null
+        return Date(day)
     }
 
     fun getTitle(): String {
-        return repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }?.title.orEmpty()
+        return getActive()?.title.orEmpty()
     }
 
     fun hasActive(): Boolean {
-        val active = repo.get().find { it.status == StrikeStatus.ACTIVE }
+        val active = getActive()
         return active != null
+    }
+
+    fun getActive(): StrikeDto? {
+        return repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
     }
 
     fun getDays(): List<Long> {
