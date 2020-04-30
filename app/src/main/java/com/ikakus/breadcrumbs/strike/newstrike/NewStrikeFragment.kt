@@ -10,7 +10,8 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
-import com.ikakus.breadcrumbs.utils.Storage
+import com.ikakus.breadcrumbs.utils.Repo
+import com.ikakus.breadcrumbs.utils.Strike
 
 val NEW_STRIKE_STARTED = "NEW_STRIKE_STARTED"
 
@@ -26,11 +27,12 @@ class NewStrikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val repo = Repo(requireContext())
+        val strike = Strike(repo)
         val title = view.findViewById<EditText>(R.id.title)
         view.findViewById<Button>(R.id.button_start)?.apply {
-            val storage = Storage(requireContext())
             this.setOnClickListener {
-                storage.create(title.text.toString())
+                strike.create(title.text.toString())
                 val intent = Intent(NEW_STRIKE_STARTED)
                 LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
             }

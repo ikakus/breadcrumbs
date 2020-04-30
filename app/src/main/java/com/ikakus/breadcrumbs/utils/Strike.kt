@@ -12,8 +12,7 @@ private const val DB_NAME = "Days"
 private const val HISTORY = "history"
 const val STRIKELENGTH = 12
 
-class Storage(context: Context) {
-    private val repo = Repo(context)
+class Strike(private val repo: Repo) {
 
     fun failStrike() {
         val active = repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
@@ -23,24 +22,10 @@ class Storage(context: Context) {
         }
     }
 
-    fun saveFirstCheckday() {
-//        with(sharedPref.edit()) {
-//            putLong(FIRST_CHECK_DAY, Date().time)
-//            commit()
-//        }
-    }
-
     fun getFirstCheckedDay(): Date? {
         val active = getActive() ?: return null
         val day = active.days.firstOrNull { it > 0 } ?: return null
         return Date(day)
-    }
-
-    fun saveLastCheckday() {
-//        with(sharedPref.edit()) {
-//            putLong(LAST_CHECK_DAY, Date().time)
-//            commit()
-//        }
     }
 
     fun getLastCheckedDay(): Date? {
@@ -53,13 +38,18 @@ class Storage(context: Context) {
         return getActive()?.title.orEmpty()
     }
 
-    fun hasActive(): Boolean {
+    fun isActive(): Boolean {
         val active = getActive()
         return active != null
     }
 
-    fun getActive(): StrikeDto? {
-        return repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
+    fun checkDay() {
+        val active = repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
+        active?.let {
+            var days = active.days.toMutableList()
+            days[0] = Date().time
+            repo.update(active.copy(days = days))
+        }
     }
 
     fun getDays(): List<Long> {
@@ -75,6 +65,10 @@ class Storage(context: Context) {
             days = days
         )
         repo.put(strike)
+    }
+
+    private fun getActive(): StrikeDto? {
+        return repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
     }
 
     private fun initDays(): MutableList<Long> {

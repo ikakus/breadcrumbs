@@ -10,30 +10,32 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
-import com.ikakus.breadcrumbs.utils.Storage
+import com.ikakus.breadcrumbs.utils.Repo
+import com.ikakus.breadcrumbs.utils.Strike
 import com.ikakus.breadcrumbs.utils.getDay
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var storage: Storage
+    private lateinit var strike: Strike
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupStorage()
+        setupStrike()
         setScreens()
     }
 
-    private fun setupStorage() {
-        storage = Storage(this)
-        if (checkIfFailed(storage)) {
-            storage.failStrike()
+    private fun setupStrike() {
+        val repo = Repo(this)
+        strike = Strike(repo)
+        if (checkIfFailed(strike)) {
+            strike.failStrike()
         }
     }
 
-    private fun checkIfFailed(storage: Storage): Boolean {
-        val lastDay = storage.getLastCheckedDay()
+    private fun checkIfFailed(strike: Strike): Boolean {
+        val lastDay = strike.getLastCheckedDay()
         val calendarLastday = Calendar.getInstance().apply {
             time = lastDay ?: Date()
         }
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun setScreens() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val active = storage.hasActive()
+        val active = strike.isActive()
         val fragment = if (active) {
             ActiveStrikeFragment()
         } else {

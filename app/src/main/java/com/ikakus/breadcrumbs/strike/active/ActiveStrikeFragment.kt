@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.reminder.AlarmHelper
+import com.ikakus.breadcrumbs.utils.Repo
 import com.ikakus.breadcrumbs.utils.STRIKELENGTH
-import com.ikakus.breadcrumbs.utils.Storage
+import com.ikakus.breadcrumbs.utils.Strike
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +29,7 @@ class ActiveStrikeFragment : Fragment() {
     private var days: MutableList<Long> = mutableListOf()
     private var checkPosition = 1
 
-    private lateinit var storage: Storage
+    private lateinit var strike: Strike
 
     private var alarmHelper: AlarmHelper? = null
 
@@ -37,7 +38,8 @@ class ActiveStrikeFragment : Fragment() {
 
         viewManager = GridLayoutManager(requireContext(), 6)
 
-        storage = Storage(requireContext())
+        val repo = Repo(requireContext())
+        strike = Strike(repo)
         alarmHelper = AlarmHelper(requireContext())
     }
 
@@ -51,8 +53,7 @@ class ActiveStrikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val storage = Storage(requireContext())
-        days = storage.getDays().toMutableList()
+        days = strike.getDays().toMutableList()
         initRecycler(days)
         initTitle()
         updateCounter()
@@ -62,7 +63,7 @@ class ActiveStrikeFragment : Fragment() {
 
     private fun checkButtonState() {
         view?.findViewById<Button>(R.id.button_check)?.apply {
-            isEnabled = !DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
+            isEnabled = !DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
 
             val checkCount = days.count { it > 0 }
             if (checkCount == 0) {
@@ -83,7 +84,7 @@ class ActiveStrikeFragment : Fragment() {
 
     private fun initTitle() {
         view?.findViewById<TextView>(R.id.title)?.apply {
-            val title = storage.getTitle()
+            val title = strike.getTitle()
             if (title.isNotEmpty()) {
                 this.text = title
             }
@@ -130,7 +131,7 @@ class ActiveStrikeFragment : Fragment() {
 
         viewAdapter = DaysRecyclerViewAdapter(
             days,
-            DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
+            DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
         )
 
         recyclerView = view?.findViewById<RecyclerView>(R.id.recycler)?.apply {
@@ -140,7 +141,7 @@ class ActiveStrikeFragment : Fragment() {
         }
 
         view?.findViewById<TextView>(R.id.first_date)?.apply {
-            val date = storage.getFirstCheckedDay()
+            val date = strike.getFirstCheckedDay()
             val dateFormat = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
             text = if (date != null) {
                 dateFormat.format(date)
@@ -161,27 +162,14 @@ class ActiveStrikeFragment : Fragment() {
     }
 
     private fun check() {
-        val checkCount = days.count { it > 0 }
-        if (checkCount == 0) {
-            storage.saveFirstCheckday()
-        }
         incrementPosition()
         days[checkPosition - 1] = Date().time
         updateCounter()
-        storage.saveLastCheckday()
-
+        strike.checkDay()
         viewAdapter.setCheckPosition(checkPosition)
-        viewAdapter.today = DateUtils.isToday(storage.getLastCheckedDay()?.time ?: 0)
+        viewAdapter.today = DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
         viewAdapter.notifyDataSetChanged()
         checkButtonState()
-    }
-
-    private fun decrementPosition(): Boolean {
-        if (checkPosition > 0) {
-            checkPosition--
-            return true
-        }
-        return false
     }
 
     private fun incrementPosition(): Boolean {
