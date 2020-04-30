@@ -10,8 +10,8 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
-import com.ikakus.breadcrumbs.common.utils.Repo
-import com.ikakus.breadcrumbs.common.utils.Strike
+import com.ikakus.breadcrumbs.strike.common.Repo
+import com.ikakus.breadcrumbs.strike.common.Strike
 
 val NEW_STRIKE_STARTED = "NEW_STRIKE_STARTED"
 

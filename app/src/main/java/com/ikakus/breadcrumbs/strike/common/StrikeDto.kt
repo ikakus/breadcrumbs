@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs.strike
+package com.ikakus.breadcrumbs.strike.common
 
 data class StrikeDto(
     val title: String,
