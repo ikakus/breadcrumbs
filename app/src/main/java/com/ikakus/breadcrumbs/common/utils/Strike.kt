@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs.utils
+package com.ikakus.breadcrumbs.common.utils
 
 import android.content.Context
 import com.google.gson.Gson

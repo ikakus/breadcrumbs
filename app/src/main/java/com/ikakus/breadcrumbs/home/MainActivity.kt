@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs
+package com.ikakus.breadcrumbs.home
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -7,12 +7,13 @@ import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.ikakus.breadcrumbs.R
+import com.ikakus.breadcrumbs.common.utils.Repo
+import com.ikakus.breadcrumbs.common.utils.Strike
+import com.ikakus.breadcrumbs.common.utils.getDay
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
-import com.ikakus.breadcrumbs.utils.Repo
-import com.ikakus.breadcrumbs.utils.Strike
-import com.ikakus.breadcrumbs.utils.getDay
 import java.util.*
 
 

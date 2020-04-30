@@ -13,10 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
+import com.ikakus.breadcrumbs.common.utils.Repo
+import com.ikakus.breadcrumbs.common.utils.STRIKELENGTH
+import com.ikakus.breadcrumbs.common.utils.Strike
 import com.ikakus.breadcrumbs.reminder.AlarmHelper
-import com.ikakus.breadcrumbs.utils.Repo
-import com.ikakus.breadcrumbs.utils.STRIKELENGTH
-import com.ikakus.breadcrumbs.utils.Strike
 import java.text.SimpleDateFormat
 import java.util.*
 
