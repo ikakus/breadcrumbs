@@ -5,9 +5,3 @@ data class StrikeDto(
     val days: List<Long>,
     val status: StrikeStatus
 )
-
-enum class StrikeStatus {
-    ACTIVE,
-    FAILED,
-    DONE
-}
