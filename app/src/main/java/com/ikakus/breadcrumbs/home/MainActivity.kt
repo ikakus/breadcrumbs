@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.common.utils.getDay
+import com.ikakus.breadcrumbs.history.HistoryActivity
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
@@ -75,8 +75,7 @@ class MainActivity : AppCompatActivity() {
     private fun setListeners() {
         findViewById<Button>(R.id.button_list)?.apply {
             this.setOnClickListener {
-                val days = strike.getHistory()
-                Toast.makeText(this@MainActivity, days.toString(), Toast.LENGTH_SHORT).show()
+                startActivity(Intent(context, HistoryActivity::class.java))
             }
         }
     }
