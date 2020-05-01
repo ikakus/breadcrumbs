@@ -83,4 +83,8 @@ class Strike(private val repo: Repo) {
         return days
     }
 
+    fun getHistory(): List<StrikeDto> {
+        return repo.get()
+    }
+
 }

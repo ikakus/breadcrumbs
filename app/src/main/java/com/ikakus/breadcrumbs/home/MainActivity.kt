@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
@@ -65,8 +67,18 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         setupStrike()
         setScreens()
+        setListeners()
         val filter = IntentFilter(NEW_STRIKE_STARTED)
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, filter)
+    }
+
+    private fun setListeners() {
+        findViewById<Button>(R.id.button_list)?.apply {
+            this.setOnClickListener {
+                val days = strike.getHistory()
+                Toast.makeText(this@MainActivity, days.toString(), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onPause() {
