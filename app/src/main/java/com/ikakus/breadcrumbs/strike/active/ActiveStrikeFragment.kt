@@ -54,9 +54,9 @@ class ActiveStrikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         days = strike.getDays().toMutableList()
+        initTitle(strike)
         initRecycler(days)
-        initTitle()
-        updateCounter()
+        updateCounter(days)
         setListeners()
         checkButtonState()
     }
@@ -66,11 +66,8 @@ class ActiveStrikeFragment : Fragment() {
             isEnabled = !DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
 
             val checkCount = days.count { it > 0 }
-            if (checkCount == 0) {
-                this.text = "Start"
-            } else {
-                this.text = "Check"
-            }
+
+            this.text = "Check"
 
             if (checkCount == (STRIKELENGTH - 1)) {
                 this.text = "Finish"
@@ -82,7 +79,7 @@ class ActiveStrikeFragment : Fragment() {
         }
     }
 
-    private fun initTitle() {
+    private fun initTitle(strike: Strike) {
         view?.findViewById<TextView>(R.id.title)?.apply {
             val title = strike.getTitle()
             if (title.isNotEmpty()) {
@@ -152,7 +149,7 @@ class ActiveStrikeFragment : Fragment() {
 
     }
 
-    private fun updateCounter() {
+    private fun updateCounter(days: MutableList<Long>) {
         view?.findViewById<TextView>(R.id.count)?.apply {
             val count = days.count { it > 0 }
             checkPosition = count
@@ -164,7 +161,7 @@ class ActiveStrikeFragment : Fragment() {
     private fun check() {
         incrementPosition()
         days[checkPosition - 1] = Date().time
-        updateCounter()
+        updateCounter(days)
         strike.checkDay()
         viewAdapter.setCheckPosition(checkPosition)
         viewAdapter.today = DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)

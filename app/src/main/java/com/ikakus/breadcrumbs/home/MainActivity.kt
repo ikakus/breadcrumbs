@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupStrike() {
         val repo = Repo(this)
         strike = Strike(repo)
+        if (strike.isActive().not()) return
+
         if (checkIfFailed(strike)) {
             strike.failStrike()
         }

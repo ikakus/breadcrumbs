@@ -7,7 +7,7 @@ const val STRIKELENGTH = 12
 class Strike(private val repo: Repo) {
 
     fun failStrike() {
-        val active = repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
+        val active = getActive()
         val updated = active?.copy(status = StrikeStatus.FAILED)
         updated?.let {
             repo.update(updated)
@@ -15,40 +15,44 @@ class Strike(private val repo: Repo) {
     }
 
     fun getFirstCheckedDay(): Date? {
-        val active = getActive() ?: return null
-        val day = active.days.firstOrNull { it > 0 } ?: return null
+        val strike = getActive()
+        require(strike != null) { "No active strike" }
+        val day = strike.days.firstOrNull { it > 0 } ?: return null
         return Date(day)
     }
 
     fun getLastCheckedDay(): Date? {
-        val active = getActive() ?: return null
-        val day = active.days.lastOrNull { it > 0 } ?: return null
+        val strike = getActive()
+        require(strike != null) { "No active strike" }
+        val day = strike.days.lastOrNull { it > 0 } ?: return null
         return Date(day)
     }
 
     fun getTitle(): String {
-        return getActive()?.title.orEmpty()
+        val strike = getActive()
+        require(strike != null) { "No active strike" }
+        return strike.title
     }
 
     fun isActive(): Boolean {
-        val active = getActive()
-        return active != null
+        return getActive() != null
     }
 
     fun checkDay() {
-        val active = repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }
+        val active = getActive()
         active?.let {
-            var days = active.days.toMutableList()
+            val days = active.days.toMutableList()
             days[0] = Date().time
             repo.update(active.copy(days = days))
         }
     }
 
     fun getDays(): List<Long> {
-        return repo.get().firstOrNull { it.status == StrikeStatus.ACTIVE }?.days ?: emptyList()
+        return getActive()?.days ?: emptyList()
     }
 
-    fun create(title: String) {
+    fun initializeNew(title: String) {
+        require(getActive() == null) { "There is ongoing active strike" }
         val days = initDays()
 
         val strike = StrikeDto(

@@ -32,7 +32,7 @@ class NewStrikeFragment : Fragment() {
         val title = view.findViewById<EditText>(R.id.title)
         view.findViewById<Button>(R.id.button_start)?.apply {
             this.setOnClickListener {
-                strike.create(title.text.toString())
+                strike.initializeNew(title.text.toString())
                 val intent = Intent(NEW_STRIKE_STARTED)
                 LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
             }
