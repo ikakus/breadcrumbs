@@ -41,10 +41,18 @@ class Strike(private val repo: Repo) {
     fun checkDay() {
         val active = getActive()
         active?.let {
+            val index = getIndexToWrite(active.days)
             val days = active.days.toMutableList()
-            days[0] = Date().time
+            days[index] = Date().time
             repo.update(active.copy(days = days))
         }
+    }
+
+    private fun getIndexToWrite(days: List<Long>): Int {
+        days.forEachIndexed { index, l ->
+            if (l < 0) return index
+        }
+        return -1
     }
 
     fun getDays(): List<Long> {

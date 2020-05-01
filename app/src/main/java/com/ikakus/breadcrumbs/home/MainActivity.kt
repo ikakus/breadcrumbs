@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupStrike()
-        setScreens()
     }
 
     private fun setupStrike() {
@@ -65,6 +63,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        setupStrike()
+        setScreens()
         val filter = IntentFilter(NEW_STRIKE_STARTED)
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, filter)
     }
