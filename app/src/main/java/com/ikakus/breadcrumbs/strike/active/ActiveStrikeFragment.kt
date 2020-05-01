@@ -1,6 +1,7 @@
 package com.ikakus.breadcrumbs.strike.active
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
+import com.ikakus.breadcrumbs.history.HistoryActivity
 import com.ikakus.breadcrumbs.reminder.AlarmHelper
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.STRIKELENGTH
@@ -99,6 +101,7 @@ class ActiveStrikeFragment : Fragment() {
             this.setOnClickListener {
                 // Get Current Date
                 // Navigate to activity
+                startActivity(Intent(requireContext(), HistoryActivity::class.java))
                 val cal = Calendar.getInstance()
                 val hour = cal.get(Calendar.HOUR_OF_DAY)
                 val min = cal.get(Calendar.MINUTE)

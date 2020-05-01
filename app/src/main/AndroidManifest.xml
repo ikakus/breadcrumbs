@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".history.HistoryActivity" />
+        <activity android:name=".reminder.ReminderActivity" />
 
         <receiver android:name="com.ikakus.breadcrumbs.reminder.notification.NotificationPublisher" />
     </application>
