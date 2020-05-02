@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
+import com.ikakus.breadcrumbs.strike.common.StrikeStatus
 
 class HistoryActivity : AppCompatActivity() {
 
@@ -16,7 +17,8 @@ class HistoryActivity : AppCompatActivity() {
         val repo = Repo(this)
         val strike = Strike(repo)
         findViewById<RecyclerView>(R.id.recycler).apply {
-            adapter = HistoryAdapter(strike.getHistory())
+            adapter =
+                HistoryAdapter(strike.getHistory().filter { it.status != StrikeStatus.ACTIVE })
             layoutManager = LinearLayoutManager(this@HistoryActivity)
         }
     }
