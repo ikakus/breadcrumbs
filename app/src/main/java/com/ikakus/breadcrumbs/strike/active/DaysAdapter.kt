@@ -10,11 +10,10 @@ import com.ikakus.breadcrumbs.R
 import kotlinx.android.synthetic.main.day_view.view.*
 
 
-class DaysRecyclerViewAdapter(
+class DaysAdapter(
     private val days: List<Long>,
     var today: Boolean
-) :
-    RecyclerView.Adapter<DaysRecyclerViewAdapter.DaysViewHolder>() {
+) : RecyclerView.Adapter<DaysAdapter.DaysViewHolder>() {
 
     class DaysViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

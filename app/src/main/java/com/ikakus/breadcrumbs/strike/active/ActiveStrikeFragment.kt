@@ -21,7 +21,7 @@ import java.util.*
 class ActiveStrikeFragment : Fragment() {
 
     private var recyclerView: RecyclerView? = null
-    private lateinit var viewAdapter: DaysRecyclerViewAdapter
+    private lateinit var viewAdapter: DaysAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var days: MutableList<Long> = mutableListOf()
@@ -105,7 +105,7 @@ class ActiveStrikeFragment : Fragment() {
 
     private fun initRecycler(days: MutableList<Long>) {
 
-        viewAdapter = DaysRecyclerViewAdapter(
+        viewAdapter = DaysAdapter(
             days,
             DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
         )
