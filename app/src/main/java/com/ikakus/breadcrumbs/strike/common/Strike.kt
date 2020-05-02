@@ -2,7 +2,7 @@ package com.ikakus.breadcrumbs.strike.common
 
 import java.util.*
 
-const val STRIKELENGTH = 12
+private const val STRIKE_LENGTH = 12
 
 class Strike(private val repo: Repo) {
 
@@ -77,7 +77,7 @@ class Strike(private val repo: Repo) {
 
     private fun initDays(): MutableList<Long> {
         val days = mutableListOf<Long>()
-        for (a in 1..STRIKELENGTH) {
+        for (a in 1..STRIKE_LENGTH) {
             days.add(-1)
         }
         return days

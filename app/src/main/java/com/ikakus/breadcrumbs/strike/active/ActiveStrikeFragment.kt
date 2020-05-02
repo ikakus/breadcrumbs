@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.reminder.ReminderActivity
 import com.ikakus.breadcrumbs.strike.common.Repo
-import com.ikakus.breadcrumbs.strike.common.STRIKELENGTH
 import com.ikakus.breadcrumbs.strike.common.Strike
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,6 +25,7 @@ class ActiveStrikeFragment : Fragment() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var days: MutableList<Long> = mutableListOf()
+    private var totalDays = 0
     private var checkPosition = 1
 
     private lateinit var strike: Strike
@@ -50,6 +50,7 @@ class ActiveStrikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         days = strike.getDays().toMutableList()
+        totalDays = days.size
         initTitle(strike)
         initRecycler(days)
         updateCounter(days)
@@ -65,11 +66,11 @@ class ActiveStrikeFragment : Fragment() {
 
             this.text = "Check"
 
-            if (checkCount == (STRIKELENGTH - 1)) {
+            if (checkCount == (totalDays - 1)) {
                 this.text = "Finish"
             }
 
-            if (checkCount == (STRIKELENGTH)) {
+            if (checkCount == (totalDays)) {
                 this.text = "All done!"
             }
         }
@@ -131,7 +132,7 @@ class ActiveStrikeFragment : Fragment() {
         view?.findViewById<TextView>(R.id.count)?.apply {
             val count = days.count { it > 0 }
             checkPosition = count
-            text = "$count/$STRIKELENGTH"
+            text = "$count/$totalDays"
             viewAdapter.setCheckPosition(checkPosition)
         }
     }
@@ -148,7 +149,7 @@ class ActiveStrikeFragment : Fragment() {
     }
 
     private fun incrementPosition(): Boolean {
-        if (checkPosition < STRIKELENGTH) {
+        if (checkPosition < totalDays) {
             checkPosition++
             return true
         }
