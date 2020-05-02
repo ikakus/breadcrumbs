@@ -4,11 +4,11 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import com.ikakus.breadcrumbs.R
+import com.ikakus.breadcrumbs.core.base.BaseActivity
 import java.util.*
 
-class ReminderActivity : AppCompatActivity() {
+class ReminderActivity : BaseActivity() {
 
     private var alarmHelper: AlarmHelper? = null
     override fun onCreate(savedInstanceState: Bundle?) {

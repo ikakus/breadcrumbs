@@ -7,15 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
+import com.ikakus.breadcrumbs.core.base.BaseFragment
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
 
 val NEW_STRIKE_STARTED = "NEW_STRIKE_STARTED"
 
-class NewStrikeFragment : Fragment() {
+class NewStrikeFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

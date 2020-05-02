@@ -6,10 +6,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
-import com.ikakus.breadcrumbs.common.utils.getDay
+import com.ikakus.breadcrumbs.core.base.BaseActivity
+import com.ikakus.breadcrumbs.core.utils.getDay
 import com.ikakus.breadcrumbs.history.HistoryActivity
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.common.Repo
@@ -19,7 +19,7 @@ import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var strike: Strike
     override fun onCreate(savedInstanceState: Bundle?) {

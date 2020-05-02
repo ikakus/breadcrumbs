@@ -8,17 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
+import com.ikakus.breadcrumbs.core.base.BaseFragment
 import com.ikakus.breadcrumbs.reminder.ReminderActivity
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ActiveStrikeFragment : Fragment() {
+class ActiveStrikeFragment : BaseFragment() {
 
     private var recyclerView: RecyclerView? = null
     private lateinit var viewAdapter: DaysAdapter
