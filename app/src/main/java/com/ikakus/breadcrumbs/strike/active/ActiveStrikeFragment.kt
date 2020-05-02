@@ -1,10 +1,8 @@
 package com.ikakus.breadcrumbs.strike.active
 
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
-import com.ikakus.breadcrumbs.history.HistoryActivity
-import com.ikakus.breadcrumbs.reminder.AlarmHelper
+import com.ikakus.breadcrumbs.reminder.ReminderActivity
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.STRIKELENGTH
 import com.ikakus.breadcrumbs.strike.common.Strike
@@ -33,8 +30,6 @@ class ActiveStrikeFragment : Fragment() {
 
     private lateinit var strike: Strike
 
-    private var alarmHelper: AlarmHelper? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,7 +37,6 @@ class ActiveStrikeFragment : Fragment() {
 
         val repo = Repo(requireContext())
         strike = Strike(repo)
-        alarmHelper = AlarmHelper(requireContext())
     }
 
     override fun onCreateView(
@@ -101,26 +95,7 @@ class ActiveStrikeFragment : Fragment() {
             this.setOnClickListener {
                 // Get Current Date
                 // Navigate to activity
-                startActivity(Intent(requireContext(), HistoryActivity::class.java))
-                val cal = Calendar.getInstance()
-                val hour = cal.get(Calendar.HOUR_OF_DAY)
-                val min = cal.get(Calendar.MINUTE)
-                Log.d("tag", cal.toString())
-                val datePickerDialog = TimePickerDialog(
-                    context,
-                    TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, hourOfDay)
-                            set(Calendar.MINUTE, minute)
-                            alarmHelper?.setAlaram(this)
-                        }
-
-                    },
-                    hour,
-                    min,
-                    true
-                )
-                datePickerDialog.show()
+                startActivity(Intent(requireContext(), ReminderActivity::class.java))
             }
 
         }
