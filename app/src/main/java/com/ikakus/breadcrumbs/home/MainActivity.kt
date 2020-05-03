@@ -13,8 +13,12 @@ import com.ikakus.breadcrumbs.history.HistoryActivity
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
+import com.ikakus.breadcrumbs.strike.common.StrikeStatus
+import com.ikakus.breadcrumbs.strike.done.DoneFragment
+import com.ikakus.breadcrumbs.strike.failed.FailedFragment
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
+import java.util.*
 
 
 class MainActivity : BaseActivity() {
@@ -34,11 +38,14 @@ class MainActivity : BaseActivity() {
     private fun setScreens() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        val active = strike.isActive()
-        val fragment = if (active) {
-            ActiveStrikeFragment()
-        } else {
-            NewStrikeFragment()
+        strike.checkState(Date())
+        val fragment = when (strike.getStatus()) {
+            StrikeStatus.ACTIVE -> {
+                ActiveStrikeFragment()
+            }
+            StrikeStatus.FAILED -> FailedFragment()
+            StrikeStatus.DONE -> DoneFragment()
+            StrikeStatus.NEW -> NewStrikeFragment()
         }
         fragmentTransaction.replace(R.id.container, fragment)
         fragmentTransaction.commit()

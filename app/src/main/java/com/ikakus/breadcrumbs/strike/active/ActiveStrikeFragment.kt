@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
@@ -16,7 +15,6 @@ import com.ikakus.breadcrumbs.core.base.BaseFragment
 import com.ikakus.breadcrumbs.reminder.ReminderActivity
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
-import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,12 +37,6 @@ class ActiveStrikeFragment : BaseFragment() {
 
         val repo = Repo(requireContext())
         strike = Strike(repo)
-        if (strike.checkIfFailed(Date())) {
-            strike.failStrike()
-            // TODO replace with general intent with payload
-            val intent = Intent(NEW_STRIKE_STARTED)
-            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
-        }
     }
 
     override fun onCreateView(

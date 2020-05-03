@@ -7,7 +7,14 @@ private const val STRIKE_LENGTH = 12
 
 class Strike(private val repo: Repo) {
 
-    fun failStrike() {
+    init {
+        if (repo.get().isEmpty()) {
+
+            repo.put(StrikeDto())
+        }
+    }
+
+    private fun failStrike() {
         val active = getActive()
         val updated = active?.copy(status = StrikeStatus.FAILED)
         updated?.let {
@@ -15,7 +22,9 @@ class Strike(private val repo: Repo) {
         }
     }
 
-    fun checkIfFailed(date: Date): Boolean {
+    fun checkState(date: Date) {
+        if (getActive() == null) return
+        if (getLastCheckedDay() == null) return
         val lastDay = getLastCheckedDay()
         val calendarLastday = Calendar.getInstance().apply {
             time = lastDay
@@ -25,7 +34,10 @@ class Strike(private val repo: Repo) {
             time = date
         }
         val maxDaysDiff = 1
-        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
+        val result = calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
+        if (result) {
+            failStrike()
+        }
     }
 
     fun getFirstCheckedDay(): Date? {
@@ -48,8 +60,8 @@ class Strike(private val repo: Repo) {
         return strike.title
     }
 
-    fun isActive(): Boolean {
-        return getActive() != null
+    fun getStatus(): StrikeStatus {
+        return repo.get().first().status
     }
 
     fun checkDay() {
@@ -80,9 +92,14 @@ class Strike(private val repo: Repo) {
         val strike = StrikeDto(
             title = title,
             status = StrikeStatus.ACTIVE,
+            dateCreated = Date().time,
             days = days
         )
-        repo.put(strike)
+        repo.update(strike)
+    }
+
+    fun getHistory(): List<StrikeDto> {
+        return repo.get()
     }
 
     private fun getActive(): StrikeDto? {
@@ -95,10 +112,6 @@ class Strike(private val repo: Repo) {
             days.add(-1)
         }
         return days
-    }
-
-    fun getHistory(): List<StrikeDto> {
-        return repo.get()
     }
 
 }
