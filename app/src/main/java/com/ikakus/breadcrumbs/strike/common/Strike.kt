@@ -3,12 +3,12 @@ package com.ikakus.breadcrumbs.strike.common
 import com.ikakus.breadcrumbs.core.utils.getDay
 import java.util.*
 
-private const val STRIKE_LENGTH = 12
+private const val STRIKE_LENGTH = 30
 
 class Strike(private val repo: Repo) {
 
     init {
-        // for first run we need some initial object
+        // for first run we need initial object
         if (repo.getStrikes().isEmpty()) {
             repo.put(StrikeDto())
         }

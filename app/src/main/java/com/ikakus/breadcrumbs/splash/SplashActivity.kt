@@ -17,6 +17,7 @@ class SplashActivity : BaseActivity() {
         Handler().postDelayed(
             {
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             },
             splashScreenDuration
         )

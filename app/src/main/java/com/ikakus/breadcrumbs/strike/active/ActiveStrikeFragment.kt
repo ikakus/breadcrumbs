@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
 import com.ikakus.breadcrumbs.reminder.ReminderActivity
@@ -43,7 +44,6 @@ class ActiveStrikeFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_active_strike, container, false)
     }
 
@@ -59,20 +59,20 @@ class ActiveStrikeFragment : BaseFragment() {
     }
 
     private fun checkButtonState() {
-        view?.findViewById<Button>(R.id.button_check)?.apply {
+        view?.findViewById<FloatingActionButton>(R.id.button_check)?.apply {
             isEnabled = !DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
 
             val checkCount = days.count { it > 0 }
-
-            this.text = "Check"
-
-            if (checkCount == (totalDays - 1)) {
-                this.text = "Finish"
-            }
-
-            if (checkCount == (totalDays)) {
-                this.text = "All done!"
-            }
+//
+//            this.text = "Check"
+//
+//            if (checkCount == (totalDays - 1)) {
+//                this.text = "Finish"
+//            }
+//
+//            if (checkCount == (totalDays)) {
+//                this.text = "All done!"
+//            }
         }
     }
 
@@ -86,7 +86,7 @@ class ActiveStrikeFragment : BaseFragment() {
     }
 
     private fun setListeners() {
-        view?.findViewById<Button>(R.id.button_check)?.apply {
+        view?.findViewById<FloatingActionButton>(R.id.button_check)?.apply {
             this.setOnClickListener {
                 check()
             }
@@ -118,7 +118,8 @@ class ActiveStrikeFragment : BaseFragment() {
 
         view?.findViewById<TextView>(R.id.first_date)?.apply {
             val date = strike.getFirstCheckedDay()
-            val dateFormat = SimpleDateFormat("dd.MM.YYYY", Locale.getDefault())
+            // show year if date is not in current year
+            val dateFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
             text = if (date != null) {
                 dateFormat.format(date)
             } else {
@@ -132,7 +133,7 @@ class ActiveStrikeFragment : BaseFragment() {
         view?.findViewById<TextView>(R.id.count)?.apply {
             val count = days.count { it > 0 }
             checkPosition = count
-            text = "$count/$totalDays"
+            text = "$count of $totalDays"
             viewAdapter.setCheckPosition(checkPosition)
         }
     }
