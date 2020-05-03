@@ -1,5 +1,6 @@
 package com.ikakus.breadcrumbs.strike.common
 
+import com.ikakus.breadcrumbs.core.utils.getDay
 import java.util.*
 
 private const val STRIKE_LENGTH = 12
@@ -12,6 +13,19 @@ class Strike(private val repo: Repo) {
         updated?.let {
             repo.update(updated)
         }
+    }
+
+    fun checkIfFailed(date: Date): Boolean {
+        val lastDay = getLastCheckedDay()
+        val calendarLastday = Calendar.getInstance().apply {
+            time = lastDay
+        }
+
+        val calendarToday = Calendar.getInstance().apply {
+            time = date
+        }
+        val maxDaysDiff = 1
+        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
     }
 
     fun getFirstCheckedDay(): Date? {

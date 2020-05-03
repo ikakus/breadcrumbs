@@ -9,14 +9,12 @@ import android.widget.Button
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseActivity
-import com.ikakus.breadcrumbs.core.utils.getDay
 import com.ikakus.breadcrumbs.history.HistoryActivity
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
-import java.util.*
 
 
 class MainActivity : BaseActivity() {
@@ -31,24 +29,6 @@ class MainActivity : BaseActivity() {
     private fun setupStrike() {
         val repo = Repo(this)
         strike = Strike(repo)
-        if (strike.isActive().not()) return
-
-        if (checkIfFailed(strike)) {
-            strike.failStrike()
-        }
-    }
-
-    private fun checkIfFailed(strike: Strike): Boolean {
-        val lastDay = strike.getLastCheckedDay()
-        val calendarLastday = Calendar.getInstance().apply {
-            time = lastDay ?: Date()
-        }
-
-        val calendarToday = Calendar.getInstance().apply {
-            time = Date()
-        }
-        val maxDaysDiff = 1
-        return calendarToday.getDay() - calendarLastday.getDay() > maxDaysDiff
     }
 
     private fun setScreens() {
