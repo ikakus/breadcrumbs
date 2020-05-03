@@ -5,8 +5,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 
-private const val DB_NAME = "Days"
-private const val HISTORY = "history"
+private const val DB_NAME = "days"
+private const val STRIKES = "strikes"
 
 class Repo(context: Context) {
 
@@ -14,31 +14,31 @@ class Repo(context: Context) {
         context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE)
 
     fun put(strike: StrikeDto) {
-        val history: ArrayList<StrikeDto> = ArrayList(get())
+        val history: ArrayList<StrikeDto> = ArrayList(getStrikes())
         history.add(strike)
-        putWhole(history)
+        putList(history)
     }
 
     fun update(strike: StrikeDto) {
         val restOfList =
-            get().filter { it.status != StrikeStatus.ACTIVE && it.status != StrikeStatus.NEW }
+            getStrikes().filter { it.status != StrikeStatus.ACTIVE && it.status != StrikeStatus.NEW }
                 .toMutableList()
         restOfList.add(strike)
-        putWhole(restOfList)
+        putList(restOfList)
     }
 
-    fun get(): List<StrikeDto> {
-        val savedString = sharedPref.getString(HISTORY, null)
+    fun getStrikes(): List<StrikeDto> {
+        val savedString = sharedPref.getString(STRIKES, null)
         savedString?.let {
             val type = object : TypeToken<List<StrikeDto>>() {}.type
             return Gson().fromJson(savedString, type)
         } ?: return emptyList()
     }
 
-    private fun putWhole(history: List<StrikeDto>) {
+    private fun putList(listOfStrikes: List<StrikeDto>) {
         with(sharedPref.edit()) {
-            val jsonText: String = Gson().toJson(history)
-            putString(HISTORY, jsonText)
+            val jsonText: String = Gson().toJson(listOfStrikes)
+            putString(STRIKES, jsonText)
             commit()
         }
     }

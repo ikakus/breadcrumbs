@@ -23,26 +23,20 @@ import java.util.*
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var strike: Strike
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_NoAnimation)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
 
-    private fun setupStrike() {
-        val repo = Repo(this)
-        strike = Strike(repo)
-    }
-
     private fun setScreens() {
+        val repo = Repo(this)
+        val strike = Strike(repo)
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         strike.checkState(Date())
         val fragment = when (strike.getStatus()) {
-            StrikeStatus.ACTIVE -> {
-                ActiveStrikeFragment()
-            }
+            StrikeStatus.ACTIVE -> ActiveStrikeFragment()
             StrikeStatus.FAILED -> FailedFragment()
             StrikeStatus.DONE -> DoneFragment()
             StrikeStatus.NEW -> NewStrikeFragment()
@@ -53,11 +47,14 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupStrike()
         setScreens()
         setListeners()
-        val filter = IntentFilter(NEW_STRIKE_STARTED)
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, filter)
+        subscribeToEvents()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unsubscribeFromEvents()
     }
 
     private fun setListeners() {
@@ -68,8 +65,12 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
+    private fun subscribeToEvents() {
+        val filter = IntentFilter(NEW_STRIKE_STARTED)
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, filter)
+    }
+
+    private fun unsubscribeFromEvents() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
     }
 
