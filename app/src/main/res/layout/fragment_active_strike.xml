@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_bg"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".home.MainActivity">
@@ -14,9 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
-        android:layout_marginStart="270dp"
-        android:layout_marginEnd="278dp"
-        android:background="@drawable/days_card"
+        android:background="@drawable/shadow"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +23,7 @@
 
         <TextView
             android:id="@+id/title"
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="36dp"
@@ -32,6 +32,7 @@
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
+            android:textColor="@android:color/tertiary_text_light"
             android:textSize="23sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,7 @@
 
         <TextView
             android:id="@+id/count"
+            android:textColor="@android:color/tertiary_text_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
@@ -53,12 +55,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="16dp"
             app:layout_constraintBottom_toTopOf="@+id/count"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <TextView
+            android:textColor="@android:color/tertiary_text_light"
             android:id="@+id/first_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="36dp"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/green"
         android:text="Check"
         android:textColor="@color/white"
         android:src="@drawable/ic_check"

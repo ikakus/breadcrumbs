@@ -2,15 +2,15 @@
     android:shape="rectangle">
 
     <corners
-        android:bottomLeftRadius="@dimen/day_view_corner_radius"
-        android:bottomRightRadius="@dimen/day_view_corner_radius"
-        android:topLeftRadius="@dimen/day_view_corner_radius"
-        android:topRightRadius="@dimen/day_view_corner_radius" />
+        android:bottomLeftRadius="@dimen/day_card_corner_radius"
+        android:bottomRightRadius="@dimen/day_card_corner_radius"
+        android:topLeftRadius="@dimen/day_card_corner_radius"
+        android:topRightRadius="@dimen/day_card_corner_radius" />
 
-    <stroke
-        android:width="@dimen/day_view_stroke"
-        android:color="@color/unchecked_day" />
+    <!--    <stroke-->
+    <!--        android:width="@dimen/day_view_stroke"-->
+    <!--        android:color="@color/cardview_light_background" />-->
 
-    <solid android:color="@color/white" />
+    <solid android:color="@color/cardview_light_background" />
 
 </shape>

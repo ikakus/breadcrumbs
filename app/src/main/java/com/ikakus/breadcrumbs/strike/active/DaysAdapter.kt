@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
 import kotlinx.android.synthetic.main.day_view.view.*
@@ -33,31 +34,24 @@ class DaysAdapter(
     }
 
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
-        holder.itemView.day_view_layout_back.setBackgroundDrawable(
+
             when {
                 days[position] > 0 -> {
-                    context.resources.getDrawable(R.drawable.day_checked)
+                    val background = context.resources.getDrawable(R.drawable.day_checked)
+                    holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
+                    holder.itemView.day_view_layout.setPadding(20)
                 }
                 position == checkPosition && !today -> {
-                    context.resources.getDrawable(R.drawable.day_current)
+                    val background = context.resources.getDrawable(R.drawable.day_current)
+                    holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
                 }
                 else -> {
-                    context.resources.getDrawable(R.drawable.day_unchecked)
+                    val background = context.resources.getDrawable(R.drawable.day_unchecked)
+                    holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
                 }
             }
-        )
 
-        holder.itemView.day_view_layout_back.elevation = when {
-            days[position] > 0 -> {
-                10f
-            }
-            position == checkPosition && !today -> {
-                20f
-            }
-            else -> {
-                0f
-            }
-        }
+
     }
 
     override fun getItemCount() = days.size
