@@ -39,11 +39,12 @@ class DaysAdapter(
                 days[position] > 0 -> {
                     val background = context.resources.getDrawable(R.drawable.day_checked)
                     holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
-                    holder.itemView.day_view_layout.setPadding(20)
+//                    holder.itemView.day_view_layout.setPadding(20)
                 }
                 position == checkPosition && !today -> {
                     val background = context.resources.getDrawable(R.drawable.day_current)
                     holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
+                    holder.itemView.day_view_layout.setPadding(20)
                 }
                 else -> {
                     val background = context.resources.getDrawable(R.drawable.day_unchecked)

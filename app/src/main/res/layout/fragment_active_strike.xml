@@ -60,6 +60,10 @@
             app:layout_constraintBottom_toTopOf="@+id/count"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="6"
+            tools:itemCount="30"
+            tools:listitem="@layout/day_view"
             app:layout_constraintTop_toBottomOf="@+id/first_date" />
 
         <TextView
