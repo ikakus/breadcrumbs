@@ -39,7 +39,7 @@ class MainActivity : BaseActivity() {
             StrikeStatus.ACTIVE -> ActiveStrikeFragment()
             StrikeStatus.FAILED -> FailedFragment()
             StrikeStatus.DONE -> DoneFragment()
-            StrikeStatus.NEW -> NewStrikeFragment()
+            StrikeStatus.COLD -> NewStrikeFragment()
         }
         fragmentTransaction.replace(R.id.container, fragment)
         fragmentTransaction.commit()

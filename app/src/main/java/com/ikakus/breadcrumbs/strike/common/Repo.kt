@@ -21,7 +21,7 @@ class Repo(context: Context) {
 
     fun update(strike: StrikeDto) {
         val restOfList =
-            getStrikes().filter { it.status != StrikeStatus.ACTIVE && it.status != StrikeStatus.NEW }
+            getStrikes().filter { it.status != StrikeStatus.ACTIVE && it.status != StrikeStatus.COLD }
                 .toMutableList()
         restOfList.add(strike)
         putList(restOfList)

@@ -1,7 +1,7 @@
 package com.ikakus.breadcrumbs.strike.common
 
 enum class StrikeStatus {
-    NEW,
+    COLD,
     ACTIVE,
     FAILED,
     DONE
