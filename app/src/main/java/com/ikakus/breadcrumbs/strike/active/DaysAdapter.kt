@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.ikakus.breadcrumbs.R
 import kotlinx.android.synthetic.main.day_view.view.*
@@ -34,25 +33,20 @@ class DaysAdapter(
     }
 
     override fun onBindViewHolder(holder: DaysViewHolder, position: Int) {
-
-            when {
-                days[position] > 0 -> {
-                    val background = context.resources.getDrawable(R.drawable.day_checked)
-                    holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
-//                    holder.itemView.day_view_layout.setPadding(20)
-                }
-                position == checkPosition && !today -> {
-                    val background = context.resources.getDrawable(R.drawable.day_current)
-                    holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
-                    holder.itemView.day_view_layout.setPadding(20)
-                }
-                else -> {
-                    val background = context.resources.getDrawable(R.drawable.day_unchecked)
-                    holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
-                }
+        when {
+            days[position] > 0 -> {
+                val background = context.resources.getDrawable(R.drawable.day_checked)
+                holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
             }
-
-
+            position == checkPosition && !today -> {
+                val background = context.resources.getDrawable(R.drawable.day_current)
+                holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
+            }
+            else -> {
+                val background = context.resources.getDrawable(R.drawable.day_unchecked)
+                holder.itemView.day_view_layout_back.setBackgroundDrawable(background)
+            }
+        }
     }
 
     override fun getItemCount() = days.size
