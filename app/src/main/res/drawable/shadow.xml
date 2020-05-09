@@ -5,10 +5,10 @@
     <item>
         <shape>
             <padding
-                android:bottom="1dp"
-                android:left="1dp"
-                android:right="1dp"
-                android:top="1dp" />
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
 
             <solid android:color="#00CCCCCC" />
 
@@ -18,12 +18,12 @@
     <item>
         <shape>
             <padding
-                android:bottom="1dp"
-                android:left="1dp"
-                android:right="1dp"
-                android:top="1dp" />
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
 
-            <solid android:color="#10E6E6E6" />
+            <solid android:color="#10CCCCCC" />
 
             <corners android:radius="@dimen/day_card_corner_radius" />
         </shape>
@@ -31,10 +31,10 @@
     <item>
         <shape>
             <padding
-                android:bottom="1dp"
-                android:left="1dp"
-                android:right="1dp"
-                android:top="1dp" />
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
 
             <solid android:color="#20CCCCCC" />
 
@@ -44,12 +44,12 @@
     <item>
         <shape>
             <padding
-                android:bottom="1dp"
-                android:left="1dp"
-                android:right="1dp"
-                android:top="1dp" />
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
 
-            <solid android:color="#22CCCCCC" />
+            <solid android:color="#30CCCCCC" />
 
             <corners android:radius="@dimen/day_card_corner_radius" />
         </shape>
@@ -57,12 +57,12 @@
     <item>
         <shape>
             <padding
-                android:bottom="1dp"
-                android:left="1dp"
-                android:right="1dp"
-                android:top="1dp" />
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
 
-            <solid android:color="#25CCCCCC" />
+            <solid android:color="#50CCCCCC" />
 
             <corners android:radius="@dimen/day_card_corner_radius" />
         </shape>

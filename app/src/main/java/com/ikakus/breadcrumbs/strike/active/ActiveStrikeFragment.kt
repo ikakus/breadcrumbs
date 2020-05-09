@@ -62,17 +62,6 @@ class ActiveStrikeFragment : BaseFragment() {
         view?.findViewById<FloatingActionButton>(R.id.button_check)?.apply {
             isEnabled = !DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
 
-            val checkCount = days.count { it > 0 }
-//
-//            this.text = "Check"
-//
-//            if (checkCount == (totalDays - 1)) {
-//                this.text = "Finish"
-//            }
-//
-//            if (checkCount == (totalDays)) {
-//                this.text = "All done!"
-//            }
         }
     }
 

@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="36dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:hint="Title"
         android:lines="1"
@@ -22,9 +23,11 @@
         android:singleLine="true"
         android:textColor="@color/text_color"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card"
@@ -34,9 +37,10 @@
         android:layout_margin="8dp"
         android:background="@drawable/shadow"
         android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_timer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/count"
@@ -57,24 +61,24 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/count"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/first_date"
             app:spanCount="6"
             tools:itemCount="30"
-            tools:listitem="@layout/day_view"
-            app:layout_constraintTop_toBottomOf="@+id/first_date" />
+            tools:listitem="@layout/day_view" />
 
         <TextView
             android:id="@+id/first_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="11.03.2020"
             android:layout_marginTop="16dp"
+            android:text="11.03.2020"
             android:textColor="@color/text_color"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/recycler" />
+            app:layout_constraintStart_toStartOf="@+id/recycler"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -84,7 +88,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="36dp"
-        android:backgroundTint="@color/green"
         android:src="@drawable/ic_check"
         android:text="Check"
         android:textColor="@color/white"
