@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,6 +22,7 @@ import java.util.*
 
 class ActiveStrikeFragment : BaseFragment() {
 
+    private var checkEnabled: Boolean = false
     private var recyclerView: RecyclerView? = null
     private lateinit var viewAdapter: DaysAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
@@ -59,10 +61,7 @@ class ActiveStrikeFragment : BaseFragment() {
     }
 
     private fun checkButtonState() {
-        view?.findViewById<FloatingActionButton>(R.id.button_check)?.apply {
-            isEnabled = !DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
-
-        }
+        checkEnabled = !DateUtils.isToday(strike.getLastCheckedDay()?.time ?: 0)
     }
 
     private fun initTitle(strike: Strike) {
@@ -77,7 +76,12 @@ class ActiveStrikeFragment : BaseFragment() {
     private fun setListeners() {
         view?.findViewById<FloatingActionButton>(R.id.button_check)?.apply {
             this.setOnClickListener {
-                check()
+                if (checkEnabled) {
+                    check()
+                } else {
+                    Toast.makeText(requireContext(), "All good for today", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
 
