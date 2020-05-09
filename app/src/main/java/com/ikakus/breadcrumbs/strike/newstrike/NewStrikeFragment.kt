@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
@@ -27,15 +28,31 @@ class NewStrikeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repo = Repo(requireContext())
-        val strike = Strike(repo)
-        val title = view.findViewById<EditText>(R.id.title)
+
+        val title = view.findViewById<EditText>(R.id.et_new_strike_name)
         view.findViewById<Button>(R.id.button_start)?.apply {
             this.setOnClickListener {
-                strike.initializeActive(title.text.toString())
-                val intent = Intent(NEW_STRIKE_STARTED)
-                LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+                handleCreation(title)
             }
         }
+    }
+
+    private fun handleCreation(
+        title: EditText
+    ) {
+        val repo = Repo(requireContext())
+        val strike = Strike(repo)
+        val strikeName = title.text.toString()
+        if (nameValid(strikeName)) {
+            strike.initializeActive(title.text.toString())
+            val intent = Intent(NEW_STRIKE_STARTED)
+            LocalBroadcastManager.getInstance(requireContext()).sendBroadcast(intent)
+        } else {
+            Toast.makeText(requireContext(), "Please fill the name", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun nameValid(text: String): Boolean {
+        return text.isNotEmpty()
     }
 }
