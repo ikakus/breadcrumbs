@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
@@ -27,6 +28,12 @@ class FailedFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val repo = Repo(requireContext())
+        val strike = Strike(repo)
+        view.findViewById<TextView>(R.id.tv_failed).apply {
+            val strikeName = strike.getTitle()
+            text = "Oh no $strikeName failed"
+        }
         setupListeners(view)
     }
 

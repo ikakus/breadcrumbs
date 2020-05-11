@@ -47,9 +47,8 @@ class Strike(private val repo: Repo) {
     }
 
     fun getTitle(): String {
-        val strike = getActive()
-        require(strike != null) { "No active strike" }
-        return strike.title
+        val strikes = repo.getStrikes().sortedByDescending { it.dateCreated }
+        return strikes.first().title
     }
 
     fun getStatus(): StrikeStatus {
