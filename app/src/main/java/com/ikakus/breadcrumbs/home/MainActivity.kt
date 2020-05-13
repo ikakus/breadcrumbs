@@ -35,10 +35,10 @@ class MainActivity : BaseActivity() {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         strike.checkState(Date())
-        val fragment = when (strike.getStatus()) {
-            StrikeStatus.ACTIVE -> ActiveStrikeFragment()
+        val fragment = when (strike.getCurrent().status) {
+            StrikeStatus.ONGOING -> ActiveStrikeFragment()
             StrikeStatus.FAILED -> FailedFragment()
-            StrikeStatus.DONE -> StrikeCompleteFragment()
+            StrikeStatus.COMPLETE -> StrikeCompleteFragment()
             StrikeStatus.COLD -> NewStrikeFragment()
         }
         fragmentTransaction.replace(R.id.container, fragment)

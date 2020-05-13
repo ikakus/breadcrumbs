@@ -18,7 +18,7 @@ class HistoryActivity : BaseActivity() {
         val strike = Strike(repo)
         findViewById<RecyclerView>(R.id.recycler).apply {
             adapter =
-                HistoryAdapter(strike.getHistory().filter { it.status != StrikeStatus.ACTIVE })
+                HistoryAdapter(strike.getHistory().filter { it.status != StrikeStatus.ONGOING })
             layoutManager = LinearLayoutManager(this@HistoryActivity)
         }
     }

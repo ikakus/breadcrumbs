@@ -10,12 +10,11 @@ class Strike(private val repo: Repo) {
     init {
         // for first run we need initial object
         if (repo.getStrikes().isEmpty()) {
-            repo.put(StrikeDto())
+            initializeNew()
         }
     }
 
     fun checkState(date: Date) {
-        if (getActive() == null) return
         if (getLastCheckedDay() == null) return
         val lastDay = getLastCheckedDay()
         val calendarLastday = Calendar.getInstance().apply {
@@ -33,15 +32,13 @@ class Strike(private val repo: Repo) {
     }
 
     fun getFirstCheckedDay(): Date? {
-        val strike = getActive()
-        require(strike != null) { "No active strike" }
+        val strike = getCurrent()
         val day = strike.days.firstOrNull { it > 0 } ?: return null
         return Date(day)
     }
 
     fun getLastCheckedDay(): Date? {
-        val strike = getActive()
-        require(strike != null) { "No active strike" }
+        val strike = getCurrent()
         val day = strike.days.lastOrNull { it > 0 } ?: return null
         return Date(day)
     }
@@ -51,18 +48,10 @@ class Strike(private val repo: Repo) {
         return strikes.first().title
     }
 
-    fun getStatus(): StrikeStatus {
-        val new = repo.getStrikes().firstOrNull { it.status == StrikeStatus.COLD }
-        if (new != null) {
-            return StrikeStatus.COLD
-        }
-        val strikes = repo.getStrikes().sortedByDescending { it.dateCreated }
-        return strikes.first().status
-    }
 
     fun checkDay() {
-        val active = getActive()
-        active?.let {
+        val active = getCurrent()
+        active.let {
             val index = getIndexToWrite(active.days)
             val days = active.days.toMutableList()
             days[index] = Date().time
@@ -71,16 +60,15 @@ class Strike(private val repo: Repo) {
     }
 
     fun getDays(): List<Long> {
-        return getActive()?.days ?: emptyList()
+        return getCurrent().days
     }
 
     fun initializeActive(title: String) {
-        require(getActive() == null) { "There is ongoing active strike" }
         val days = initDays()
 
         val strike = StrikeDto(
             title = title,
-            status = StrikeStatus.ACTIVE,
+            status = StrikeStatus.ONGOING,
             dateCreated = Date().time,
             days = days
         )
@@ -102,9 +90,9 @@ class Strike(private val repo: Repo) {
         return -1
     }
 
-    private fun getActive(): StrikeDto? {
+    fun getCurrent(): StrikeDto {
         val strikes = repo.getStrikes().sortedByDescending { it.dateCreated }
-        return strikes.firstOrNull { it.status == StrikeStatus.ACTIVE }
+        return strikes.first()
     }
 
     private fun initDays(): MutableList<Long> {
@@ -116,9 +104,9 @@ class Strike(private val repo: Repo) {
     }
 
     private fun failStrike() {
-        val active = getActive()
-        val updated = active?.copy(status = StrikeStatus.FAILED)
-        updated?.let {
+        val active = getCurrent()
+        val updated = active.copy(status = StrikeStatus.FAILED)
+        updated.let {
             repo.update(updated)
         }
     }
