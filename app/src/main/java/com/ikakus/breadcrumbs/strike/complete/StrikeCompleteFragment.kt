@@ -1,4 +1,4 @@
-package com.ikakus.breadcrumbs.strike.done
+package com.ikakus.breadcrumbs.strike.complete
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +8,14 @@ import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
 
 
-class DoneFragment : BaseFragment() {
+class StrikeCompleteFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_done_strike, container, false)
+        return inflater.inflate(R.layout.fragment_strike_complete, container, false)
     }
 
 }

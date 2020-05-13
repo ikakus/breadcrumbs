@@ -14,7 +14,7 @@ import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
 import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
 import com.ikakus.breadcrumbs.strike.common.StrikeStatus
-import com.ikakus.breadcrumbs.strike.done.DoneFragment
+import com.ikakus.breadcrumbs.strike.complete.StrikeCompleteFragment
 import com.ikakus.breadcrumbs.strike.failed.FailedFragment
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 import com.ikakus.breadcrumbs.strike.newstrike.NewStrikeFragment
@@ -38,7 +38,7 @@ class MainActivity : BaseActivity() {
         val fragment = when (strike.getStatus()) {
             StrikeStatus.ACTIVE -> ActiveStrikeFragment()
             StrikeStatus.FAILED -> FailedFragment()
-            StrikeStatus.DONE -> DoneFragment()
+            StrikeStatus.DONE -> StrikeCompleteFragment()
             StrikeStatus.COLD -> NewStrikeFragment()
         }
         fragmentTransaction.replace(R.id.container, fragment)
