@@ -3,5 +3,5 @@
     <dimen name="day_view_corner_radius">15dp</dimen>
     <dimen name="day_view_stroke">1dp</dimen>
     <dimen name="day_square_size">40dp</dimen>
-    <dimen name="day_card_corner_radius">15dp</dimen>
+    <dimen name="day_card_corner_radius">9dp</dimen>
 </resources>

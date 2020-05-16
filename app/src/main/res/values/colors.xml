@@ -10,6 +10,7 @@
     <color name="purple">#AF78FF</color>
     <color name="outline">#33000000</color>
     <color name="gray">#9DA1A8</color>
+    <color name="red">#F44336</color>
 
     <color name="stroke_color">#00DADADA</color>
     <color name="checked_day">#2BAC74</color>
