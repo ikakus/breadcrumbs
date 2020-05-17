@@ -15,6 +15,7 @@ class Strike(private val repo: Repo) {
     }
 
     fun checkState(date: Date) {
+        if (getCurrent().status != StrikeStatus.ONGOING) return
         if (getLastCheckedDay() == null) return
         val lastDay = getLastCheckedDay()
         val calendarLastday = Calendar.getInstance().apply {
@@ -76,7 +77,7 @@ class Strike(private val repo: Repo) {
     }
 
     fun initializeNew() {
-        repo.put(StrikeDto())
+        repo.put(StrikeDto(dateCreated = Date().time))
     }
 
     fun getHistory(): List<StrikeDto> {
