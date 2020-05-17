@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
+import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
@@ -29,8 +29,8 @@ class StrikeCompleteFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val repo = Repo(requireContext())
         val strike = Strike(repo)
-        val title = view.findViewById<EditText>(R.id.et_strike_name)
-        title.setText(strike.getCurrent().title)
+        val title = view.findViewById<TextView>(R.id.et_strike_name)
+        title.text = strike.getCurrent().title
         view.findViewById<Button>(R.id.button_start)?.apply {
             this.setOnClickListener {
                 strike.initializeNew()
