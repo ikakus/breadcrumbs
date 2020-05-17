@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
-import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
+import com.ikakus.breadcrumbs.strike.common.StrikeRepository
 
 val NEW_STRIKE_STARTED = "NEW_STRIKE_STARTED"
 
@@ -40,7 +40,7 @@ class NewStrikeFragment : BaseFragment() {
     private fun handleCreation(
         title: EditText
     ) {
-        val repo = Repo(requireContext())
+        val repo = StrikeRepository(requireContext())
         val strike = Strike(repo)
         val strikeName = title.text.toString()
         if (nameValid(strikeName)) {

@@ -5,11 +5,11 @@ import java.util.*
 
 private const val STRIKE_LENGTH = 30
 
-class Strike(private val repo: Repo) {
+class Strike(private val strikeRepository: StrikeRepository) {
 
     init {
         // for first run we need initial object
-        if (repo.getStrikes().isEmpty()) {
+        if (strikeRepository.getStrikes().isEmpty()) {
             initializeNew()
         }
     }
@@ -45,7 +45,7 @@ class Strike(private val repo: Repo) {
     }
 
     fun getTitle(): String {
-        val strikes = repo.getStrikes().sortedByDescending { it.dateCreated }
+        val strikes = strikeRepository.getStrikes().sortedByDescending { it.dateCreated }
         return strikes.first().title
     }
 
@@ -56,7 +56,7 @@ class Strike(private val repo: Repo) {
             val index = getIndexToWrite(active.days)
             val days = active.days.toMutableList()
             days[index] = Date().time
-            repo.update(active.copy(days = days))
+            strikeRepository.update(active.copy(days = days))
         }
     }
 
@@ -73,15 +73,15 @@ class Strike(private val repo: Repo) {
             dateCreated = Date().time,
             days = days
         )
-        repo.update(strike)
+        strikeRepository.update(strike)
     }
 
     fun initializeNew() {
-        repo.put(StrikeDto(dateCreated = Date().time))
+        strikeRepository.put(StrikeDto(dateCreated = Date().time))
     }
 
     fun getHistory(): List<StrikeDto> {
-        return repo.getStrikes()
+        return strikeRepository.getStrikes()
     }
 
     private fun getIndexToWrite(days: List<Long>): Int {
@@ -92,7 +92,7 @@ class Strike(private val repo: Repo) {
     }
 
     fun getCurrent(): StrikeDto {
-        val strikes = repo.getStrikes().sortedByDescending { it.dateCreated }
+        val strikes = strikeRepository.getStrikes().sortedByDescending { it.dateCreated }
         return strikes.first()
     }
 
@@ -108,7 +108,7 @@ class Strike(private val repo: Repo) {
         val active = getCurrent()
         val updated = active.copy(status = StrikeStatus.FAILED)
         updated.let {
-            repo.update(updated)
+            strikeRepository.update(updated)
         }
     }
 

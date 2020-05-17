@@ -8,7 +8,7 @@ import com.google.gson.reflect.TypeToken
 private const val DB_NAME = "days"
 private const val STRIKES = "strikes"
 
-class Repo(context: Context) {
+class StrikeRepository(context: Context) {
 
     private var sharedPref =
         context.getSharedPreferences(DB_NAME, Context.MODE_PRIVATE)

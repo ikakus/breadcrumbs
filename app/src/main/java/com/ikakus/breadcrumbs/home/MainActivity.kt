@@ -11,8 +11,8 @@ import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseActivity
 import com.ikakus.breadcrumbs.history.HistoryActivity
 import com.ikakus.breadcrumbs.strike.active.ActiveStrikeFragment
-import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
+import com.ikakus.breadcrumbs.strike.common.StrikeRepository
 import com.ikakus.breadcrumbs.strike.common.StrikeStatus
 import com.ikakus.breadcrumbs.strike.complete.StrikeCompleteFragment
 import com.ikakus.breadcrumbs.strike.failed.FailedFragment
@@ -30,7 +30,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setScreens() {
-        val repo = Repo(this)
+        val repo = StrikeRepository(this)
         val strike = Strike(repo)
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()

@@ -15,8 +15,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
 import com.ikakus.breadcrumbs.reminder.ReminderActivity
-import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
+import com.ikakus.breadcrumbs.strike.common.StrikeRepository
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,7 +38,7 @@ class ActiveStrikeFragment : BaseFragment() {
 
         viewManager = GridLayoutManager(requireContext(), 6)
 
-        val repo = Repo(requireContext())
+        val repo = StrikeRepository(requireContext())
         strike = Strike(repo)
     }
 

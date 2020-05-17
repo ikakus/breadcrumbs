@@ -10,8 +10,8 @@ import android.widget.TextView
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ikakus.breadcrumbs.R
 import com.ikakus.breadcrumbs.core.base.BaseFragment
-import com.ikakus.breadcrumbs.strike.common.Repo
 import com.ikakus.breadcrumbs.strike.common.Strike
+import com.ikakus.breadcrumbs.strike.common.StrikeRepository
 import com.ikakus.breadcrumbs.strike.common.StrikeStatus
 import com.ikakus.breadcrumbs.strike.newstrike.NEW_STRIKE_STARTED
 
@@ -28,7 +28,7 @@ class FailedFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val repo = Repo(requireContext())
+        val repo = StrikeRepository(requireContext())
         val strike = Strike(repo)
         view.findViewById<TextView>(R.id.tv_failed).apply {
             val strikeName = strike.getTitle()
@@ -38,7 +38,7 @@ class FailedFragment : BaseFragment() {
     }
 
     private fun setupListeners(view: View) {
-        val repo = Repo(requireContext())
+        val repo = StrikeRepository(requireContext())
         val strike = Strike(repo)
 
         view.findViewById<Button>(R.id.btn_restart)?.apply {
